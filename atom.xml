@@ -1,99 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
 
-<!DOCTYPE html>
-<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
-<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
-<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
-<head>
-  <meta charset="utf-8">
-  <title>lilu.life</title>
-  <meta name="author" content="lilu.life@gmail.com">
-
-  
-  <meta name="description" content="轻量化标记语言 指的是一类语法简单,容易阅读和修改，且富于表达力的标记语言(轻量化是相对于较复杂的标记语言，如SGML系，包括XML/HTML等)，最早起源于构造各类软件的文档，出于程序员们追求效率的天然本能，这些文档应该足够方便被阅读和修改，后来也逐渐扩散至web发布领域， &hellip;">
-  
-
-  <!-- http://t.co/dKP3o1e -->
-  <meta name="HandheldFriendly" content="True">
-  <meta name="MobileOptimized" content="320">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title><![CDATA[lilu.life]]></title>
+  <link href="http://lilu.github.com/atom.xml" rel="self"/>
+  <link href="http://lilu.github.com/"/>
+  <updated>2012-07-13T17:33:17+08:00</updated>
+  <id>http://lilu.github.com/</id>
+  <author>
+    <name><![CDATA[lilu.life@gmail.com]]></name>
+    <email><![CDATA[lilu.life@gmail.com]]></email>
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
 
   
-  <link rel="canonical" href="http://lilu.github.com/">
-  <link href="/favicon.png" rel="icon">
-  <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
-  <script src="/javascripts/modernizr-2.0.js"></script>
-  <script src="/javascripts/ender.js"></script>
-  <script src="/javascripts/octopress.js" type="text/javascript"></script>
-  <link href="/atom.xml" rel="alternate" title="lilu.life" type="application/atom+xml">
-  <!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
-<link href="http://fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
-<link href="http://fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
-
-  
-
-</head>
-
-<body   >
-  <header role="banner"><hgroup>
-  <h1><a href="/">lilu.life</a></h1>
-  
-    <h2>All about belief, startup and programming</h2>
-  
-</hgroup>
-
-</header>
-  <nav role="navigation"><ul class="subscription" data-subscription="rss">
-  <li><a href="/atom.xml" rel="subscribe-rss" title="subscribe via RSS">RSS</a></li>
-  
-</ul>
-  
-<form action="http://google.com/search" method="get">
-  <fieldset role="search">
-    <input type="hidden" name="q" value="site:lilu.github.com" />
-    <input class="search" type="text" name="q" results="0" placeholder="Search"/>
-  </fieldset>
-</form>
-  
-<ul class="main-navigation">
-  <li><a href="/">Blog</a></li>
-  <li><a href="/blog/archives">Archives</a></li>
-</ul>
-
-</nav>
-  <div id="main">
-    <div id="content">
-      <div class="blog-index">
-  
-  
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2012/07/13/markdown/">轻量化标记语言Markdown</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2012-07-13T14:20:00+08:00" pubdate data-updated="true">2012-07-13 14:20:00</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><h2>轻量化标记语言</h2>
+  <entry>
+    <title type="html"><![CDATA[轻量化标记语言Markdown]]></title>
+    <link href="http://lilu.github.com/blog/2012/07/13/markdown/"/>
+    <updated>2012-07-13T14:20:00+08:00</updated>
+    <id>http://lilu.github.com/blog/2012/07/13/markdown</id>
+    <content type="html"><![CDATA[<h2>轻量化标记语言</h2>
 
 <p>指的是一类语法简单,容易阅读和修改，且富于表达力的标记语言(轻量化是相对于较复杂的标记语言，如SGML系，包括XML/HTML等)，最早起源于构造各类软件的文档，出于程序员们追求效率的天然本能，这些文档应该足够方便被阅读和修改，后来也逐渐扩散至web发布领域，尤其是blog和wiki，通常我们使用轻量化标记语言输入内容，然后由服务端程序将其转换成html等“较重的”结构化语言。</p>
 
@@ -347,55 +272,7 @@ ____
 </code></pre>
 
 <p>目前Markdown还不能定义图像的属性，如果你愿意的话，可以直接使用img标签</p>
-</div>
+]]></content>
+  </entry>
   
-  
-
-
-    </article>
-  
-  <div class="pagination">
-    
-    <a href="/blog/archives">Blog Archives</a>
-    
-  </div>
-</div>
-<aside class="sidebar">
-  
-    <section>
-  <h1>Recent Posts</h1>
-  <ul id="recent_posts">
-    
-      <li class="post">
-        <a href="/blog/2012/07/13/markdown/">轻量化标记语言Markdown</a>
-      </li>
-    
-  </ul>
-</section>
-
-
-  
-</aside>
-
-    </div>
-  </div>
-  <footer role="contentinfo"><p>
-  Copyright &copy; 2012 - lilu.life@gmail.com -
-  <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
-</p>
-
-</footer>
-  
-
-
-
-
-
-
-
-
-
-
-
-</body>
-</html>
+</feed>
