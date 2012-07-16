@@ -6,10 +6,10 @@
 <head>
   <meta charset="utf-8">
   <title>lilu.life</title>
-  <meta name="author" content="lilu.life@gmail.com">
+  <meta name="author" content="lilu">
 
   
-  <meta name="description" content="轻量化标记语言 指的是一类语法简单,容易阅读和修改，且富于表达力的标记语言(轻量化是相对于较复杂的标记语言，如SGML系，包括XML/HTML等)，最早起源于构造各类软件的文档，出于程序员们追求效率的天然本能，这些文档应该足够方便被阅读和修改，后来也逐渐扩散至web发布领域， &hellip;">
+  <meta name="description" content="Twitter Bootstrap(以下简称Bootstrap)是一个web开发的前端工具库，由Twitter的Mark Otto和Jacob Thornton创建，在很短的时间内，就成为了github上最热门的项目，不过，目前web开发已经进入相对成熟的后期了，可以找到很多出色的前端样式框架， &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -18,57 +18,171 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
   
-  <link rel="canonical" href="http://lilu.github.com/">
+  <link rel="canonical" href="http://lilu.github.com">
   <link href="/favicon.png" rel="icon">
-  <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
-  <script src="/javascripts/modernizr-2.0.js"></script>
-  <script src="/javascripts/ender.js"></script>
+  <link href="/stylesheets/bootstrap/bootstrap.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <link href="/stylesheets/bootstrap/responsive.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <link href="/stylesheets/syntax/syntax.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <style type="text/css">
+    body {
+      padding-bottom: 40px;
+    }
+    h1 {
+      margin-bottom: 15px;
+    }
+    img {
+      max-width: 100%;
+    }
+    .sharing, .meta, .pager {
+      margin: 20px 0px 20px 0px;
+    }
+    .page-footer p {
+      text-align: center;
+    }
+  </style>
+  <script src="/javascripts/libs/jquery.js"></script>
+  <script src="/javascripts/libs/modernizr-2.0.js"></script>
+  <script src="/javascripts/libs/bootstrap.js"></script>
   <script src="/javascripts/octopress.js" type="text/javascript"></script>
   <link href="/atom.xml" rel="alternate" title="lilu.life" type="application/atom+xml">
-  <!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
-<link href="http://fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
-<link href="http://fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
-
+  
   
 
 </head>
 
 <body   >
-  <header role="banner"><hgroup>
-  <h1><a href="/">lilu.life</a></h1>
-  
-    <h2>All about belief, startup and programming</h2>
-  
-</hgroup>
+  <nav role="navigation"><div class="navbar">
+  <div class="navbar-inner">
+    <div class="container">
+      <a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </a>
 
-</header>
-  <nav role="navigation"><ul class="subscription" data-subscription="rss">
-  <li><a href="/atom.xml" rel="subscribe-rss" title="subscribe via RSS">RSS</a></li>
-  
-</ul>
-  
-<form action="http://google.com/search" method="get">
-  <fieldset role="search">
-    <input type="hidden" name="q" value="site:lilu.github.com" />
-    <input class="search" type="text" name="q" results="0" placeholder="Search"/>
-  </fieldset>
-</form>
-  
-<ul class="main-navigation">
+      <a class="brand" href="/">lilu.life</a>
+
+      <div class="nav-collapse">
+        <ul class="nav">
   <li><a href="/">Blog</a></li>
   <li><a href="/blog/archives">Archives</a></li>
 </ul>
 
+
+        <ul class="nav pull-right" data-subscription="rss">
+          <li><a href="/atom.xml" rel="subscribe-rss" title="subscribe via RSS">RSS</a></li>
+          
+        </ul>
+
+        
+          <form class="pull-right navbar-search" action="http://google.com/search" method="get">
+            <fieldset role="search">
+              <input type="hidden" name="q" value="site:lilu.github.com" />
+              <input class="search-query" type="text" name="q" results="0" placeholder="Search"/>
+            </fieldset>
+          </form>
+        
+      </div>
+    </div>
+  </div>
+</div>
 </nav>
-  <div id="main">
-    <div id="content">
-      <div class="blog-index">
+  <div class="container">
+    <div class="row-fluid">
+      <div class="span9">
   
   
   
     <article>
       
-  <header>
+  <header class="page-header">
+    
+      <h1 class="entry-title"><a href="/blog/2012/07/16/style-framework/">Twitter Bootstrap及其他样式框架</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2012-07-16T12:22:00+08:00" pubdate data-updated="true">2012-07-16 12:22:00</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p><a href="http://twitter.github.com/bootstrap/">Twitter Bootstrap</a>(以下简称<em>Bootstrap</em>)是一个web开发的前端工具库，由Twitter的<em>Mark Otto</em>和<em>Jacob Thornton</em>创建，在很短的时间内，就成为了github上最热门的项目，不过，目前web开发已经进入相对成熟的后期了，可以找到很多出色的前端样式框架，虽然很方便，不过对于一个新项目来说，不可避免地会陷入选择性障碍，今天就简单总结一下我所知的主流现状：</p>
+
+<h2>SASS and LESS</h2>
+
+<p>不管是<a href="http://sass-lang.com/">SASS</a>，还是<a href="http://lesscss.org">LESS</a>，都可以视为一种基于CSS之上的高级语言，其目的是使得CSS开发更灵活和更强大，这两者我的感觉是对于程序员来说，SASS的功能要远比LESS强大，基本可以说是一种真正的编程语言了，而对于设计师，LESS则相对清晰明了，<a href="http://css-tricks.com/sass-vs-less/">这里</a>是Chris Coyier写的一篇关于SASS和LESS的背靠背对比，可以说是相当中肯的(评论也相当有料喔)。当然，如果使用Rails之类的框架，基于SASS是会来的更方便一些。</p>
+
+<hr />
+
+<h2>Compass and Blueprint</h2>
+
+<p>SASS和<a href="http://compass-style.org/">Compass</a>的关系，在很多人来看类似于ruby和rails，compass基于SASS，是一个真正意义上的编程框架，提供了大量的mixin(可理解为函数库)，无论是对css3繁杂的多浏览器写法的简化支持，还是实现各种常见功能的helper，都是强大而丰富的。另外，包括Scott Davis和Eric Meyer的核心团队，也可以说是全明星组合。</p>
+
+<p><a href="http://www.blueprintcss.org/">Blueprint</a>是一套预定义的样式，包括对大部分常用web交互组件的渲染，并且有一个强大的格子布局系统(grid system)，即使不懂设计的程序员，也可以使用blueprint的默认样式做出很漂亮的页面。</p>
+
+<p>Blueprint和Compass，是一个分工很明确的组合，前者负责样式渲染，后者则是基础框架和模块，可以说，在bootstrap诞生之前，是web开发首选的黄金组合。</p>
+
+<hr />
+
+<h2>HTML5 Boilerplate</h2>
+
+<p><a href="http://html5boilerplate.com/">HTML5 Boilerplate</a>项目(以下简称h5bp)则如同名字一样，实现的是一个web页面的标准模板，尤其针对html5进行了全面优化，同时也对老浏览器向后兼容，基本上来说，h5bp与样式相关的主要部分，是compass的一个子集，不过h5bp并不只限于css，还默认引入了很多很好的js开发库，包括<a href="http://modernizr.com/">Modernizr</a>和Jquery，再加上一个标准化的index.html模板</p>
+
+<p>h5bp是这里提到的所有框架中使用起来最方便的，当然受功能限制，她最适用的目标是单页web app或者静态页面，对于复杂的项目来说，需要和其他框架做互补。</p>
+
+<hr />
+
+<h2>Twitter Bootstrap</h2>
+
+<p>新兴而野心十足的Bootstrap跟上述又都不同，她是基于LESS的一套前端工具库，意图非常明显，想以一个项目，整合Compass，Blueprint，h5bp的目标功能，成为web前端的一站式解决方案。</p>
+
+<ul>
+<li>一套完整的基础css模块，但不如compass丰富和强大</li>
+<li>一套预定义样式表，包括一个格子布局系统，和blueprint提供的差不多，只是设计风格不一样</li>
+<li>一组基于Jquery的js交互插件，这是Bootstrap真正强大的地方，也是她严格意义上可以取代Blueprint的原因所在，这些非常不错的小插件，包括对话框，下拉导航等等，不但功能完善，而且十分精致，正在成为众多jquery项目的默认设计标准。</li>
+</ul>
+
+
+<p>特别提一下，Bootstrap使用<a href="http://necolas.github.com/normalize.css/">Normalize.css</a>来进行Reset CSS，这一项目已经成为了事实标准(超过Compass的Eric meyer 2.0)，强烈推荐使用，另外前边说的h5bp也使用Normalize，因此，如果你在项目中同时使用了h5bp和Bootstrap， 请注意，<strong>没有必要再引入h5bp的初始样式表style.css</strong></p>
+
+<hr />
+
+<h2>So What?</h2>
+
+<p>说了一大堆，该来点结论了，目前对于web开发，尤其是由程序员进行的full stack开发，最好的组合是：</p>
+
+<p><strong>SASS+Compass+Bootstrap</strong></p>
+
+<p>这样既可以利用SASS强大的编程能力，Compass强大的底层函数，又可以获取Bootstrap丰富的UI组件支持。</p>
+
+<p>只是，Bootstrap是基于LESS的，要让她们协同工作，需要一个SASS的Bootstrap移植版本，幸亏github上从来不缺这类项目，当前最好的一个是<a href="https://github.com/thomas-mcdonald/bootstrap-sass">bootstrap-sass</a></p>
+
+<hr />
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header class="page-header">
     
       <h1 class="entry-title"><a href="/blog/2012/07/13/markdown/">轻量化标记语言Markdown</a></h1>
     
@@ -354,17 +468,21 @@ ____
 
     </article>
   
-  <div class="pagination">
+  <ul class="pager">
     
-    <a href="/blog/archives">Blog Archives</a>
+    <li><a href="/blog/archives">Blog Archives</a></li>
     
-  </div>
+  </ul>
 </div>
-<aside class="sidebar">
+<aside class="sidebar-nav span3">
   
-    <section>
-  <h1>Recent Posts</h1>
-  <ul id="recent_posts">
+    <section class="well">
+  <ul id="recent_posts" class="nav nav-list">
+    <li class="nav-header">Recent Posts</li>
+    
+      <li class="post">
+        <a href="/blog/2012/07/16/style-framework/">Twitter Bootstrap及其他样式框架</a>
+      </li>
     
       <li class="post">
         <a href="/blog/2012/07/13/markdown/">轻量化标记语言Markdown</a>
@@ -379,8 +497,9 @@ ____
 
     </div>
   </div>
-  <footer role="contentinfo"><p>
-  Copyright &copy; 2012 - lilu.life@gmail.com -
+  <footer role="contentinfo" class="page-footer"><hr>
+<p>
+  Copyright &copy; 2012 - lilu -
   <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
 </p>
 
