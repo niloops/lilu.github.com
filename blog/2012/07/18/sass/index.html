@@ -5,7 +5,7 @@
 <!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
 <head>
   <meta charset="utf-8">
-  <title>lilu.life</title>
+  <title>SASS和Compass指南 - lilu.life</title>
   <meta name="author" content="lilu">
 
   
@@ -18,7 +18,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
   
-  <link rel="canonical" href="http://lilu.github.com">
+  <link rel="canonical" href="http://lilu.github.com/blog/2012/07/18/sass">
   <link href="/favicon.png" rel="icon">
   <link href="/stylesheets/bootstrap/bootstrap.css" media="screen, projection" rel="stylesheet" type="text/css">
   <link href="/stylesheets/bootstrap/responsive.css" media="screen, projection" rel="stylesheet" type="text/css">
@@ -89,15 +89,13 @@
 </nav>
   <div class="container">
     <div class="row-fluid">
-      <div class="span9">
-  
-  
-  
-    <article>
       
+<article class="hentry span9" role="article">
+
+  
   <header class="page-header">
     
-      <h1 class="entry-title"><a href="/blog/2012/07/18/sass/">SASS和Compass指南</a></h1>
+      <h1 class="entry-title">SASS和Compass指南</h1>
     
     
       <p class="meta">
@@ -120,7 +118,7 @@
   </header>
 
 
-  <div class="entry-content"><h2>CSS预处理器</h2>
+<div class="entry-content"><h2>CSS预处理器</h2>
 
 <p>CSS预处理器(CSS Preprocessor)，是一种构架于css之上的高级语言，可以通过脚本编译生成CSS代码，其目的是为了让CSS开发者的工作更简单有趣，当前已经进入了较为成熟的阶段，基本上新的web开发项目大都已普遍使用。</p>
 
@@ -870,109 +868,16 @@
 
 <hr />
 </div>
-  
-  
 
 
-    </article>
-  
-  
-    <article>
+  <footer>
+    <p class="meta">
       
-  <header class="page-header">
-    
-      <h1 class="entry-title"><a href="/blog/2012/07/16/style-framework/">Twitter Bootstrap及其他样式框架</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
   
 
+<span class="byline author vcard">Posted by <span class="fn">lilu</span></span>
 
-<time datetime="2012-07-16T12:22:00+08:00" pubdate data-updated="true">2012-07-16 12:22:00</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p><a href="http://twitter.github.com/bootstrap/">Twitter Bootstrap</a>(以下简称<em>Bootstrap</em>)是一个web开发的前端工具库，由Twitter的<em>Mark Otto</em>和<em>Jacob Thornton</em>创建，在很短的时间内，就成为了github上最热门的项目，不过，目前web开发已经进入相对成熟的后期了，可以找到很多出色的前端样式框架，虽然很方便，不过对于一个新项目来说，不可避免地会陷入选择性障碍，今天就简单总结一下我所知的主流现状：</p>
-
-<h2>SASS and LESS</h2>
-
-<p>不管是<a href="http://sass-lang.com/">SASS</a>，还是<a href="http://lesscss.org">LESS</a>，都可以视为一种基于CSS之上的高级语言，其目的是使得CSS开发更灵活和更强大，这两者我的感觉是对于程序员来说，SASS的功能要远比LESS强大，基本可以说是一种真正的编程语言了，而对于设计师，LESS则相对清晰明了，<a href="http://css-tricks.com/sass-vs-less/">这里</a>是Chris Coyier写的一篇关于SASS和LESS的背靠背对比，可以说是相当中肯的(评论也相当有料喔)。当然，如果使用Rails之类的框架，基于SASS是会来的更方便一些。</p>
-
-<hr />
-
-<h2>Compass and Blueprint</h2>
-
-<p>SASS和<a href="http://compass-style.org/">Compass</a>的关系，在很多人来看类似于ruby和rails，compass基于SASS，是一个真正意义上的编程框架，提供了大量的mixin(可理解为函数库)，无论是对css3繁杂的多浏览器写法的简化支持，还是实现各种常见功能的helper，都是强大而丰富的。另外，包括Scott Davis和Eric Meyer的核心团队，也可以说是全明星组合。</p>
-
-<p><a href="http://www.blueprintcss.org/">Blueprint</a>是一套预定义的样式，包括对大部分常用web交互组件的渲染，并且有一个强大的栅格系统(grid system)，即使不懂设计的程序员，也可以使用blueprint的默认样式做出很漂亮的页面。</p>
-
-<p>Blueprint和Compass，是一个分工很明确的组合，前者负责样式渲染，后者则是基础框架和模块，可以说，在bootstrap诞生之前，是web开发首选的黄金组合。</p>
-
-<hr />
-
-<h2>HTML5 Boilerplate</h2>
-
-<p><a href="http://html5boilerplate.com/">HTML5 Boilerplate</a>项目(以下简称h5bp)则如同名字一样，实现的是一个web页面的标准模板，尤其针对html5进行了全面优化，同时也对老浏览器向后兼容，基本上来说，h5bp与样式相关的主要部分，是compass的一个子集，不过h5bp并不只限于css，还默认引入了很多很好的js开发库，包括<a href="http://modernizr.com/">Modernizr</a>和Jquery，再加上一个标准化的index.html模板</p>
-
-<p>h5bp是这里提到的所有框架中使用起来最方便的，当然受功能限制，她最适用的目标是单页web app或者静态页面，对于复杂的项目来说，需要和其他框架做互补。</p>
-
-<hr />
-
-<h2>Twitter Bootstrap</h2>
-
-<p>新兴而野心十足的Bootstrap跟上述又都不同，她是基于LESS的一套前端工具库，意图非常明显，想以一个项目，整合Compass，Blueprint，h5bp的目标功能，成为web前端的一站式解决方案。</p>
-
-<ul>
-<li>一套完整的基础css模块，但不如compass丰富和强大</li>
-<li>一套预定义样式表，也包括一个栅格系统，和blueprint提供的差不多，只是设计风格不一样</li>
-<li>一组基于Jquery的js交互插件，这是Bootstrap真正强大的地方，也是她严格意义上可以取代Blueprint的原因所在，这些非常不错的小插件，包括对话框，下拉导航等等，不但功能完善，而且十分精致，正在成为众多jquery项目的默认设计标准。</li>
-</ul>
-
-
-<p>特别提一下，Bootstrap使用<a href="http://necolas.github.com/normalize.css/">Normalize.css</a>来进行Reset CSS，这一项目已经成为了事实标准(超过Compass的Eric meyer 2.0)，强烈推荐使用，另外前边说的h5bp也使用Normalize，因此，如果你在项目中同时使用了h5bp和Bootstrap， 请注意，<strong>没有必要再引入h5bp的初始样式表style.css</strong></p>
-
-<hr />
-
-<h2>So What?</h2>
-
-<p>说了一大堆，该来点结论了，目前对于web开发，尤其是由程序员进行的full stack开发，最好的组合是：</p>
-
-<p><strong>SASS+Compass+Bootstrap</strong></p>
-
-<p>这样既可以利用SASS强大的编程能力，Compass强大的底层函数，又可以获取Bootstrap丰富的UI组件支持。</p>
-
-<p>只是，Bootstrap是基于LESS的，要让她们协同工作，需要一个SASS的Bootstrap移植版本，幸亏github上从来不缺这类项目，当前最好的一个是<a href="https://github.com/thomas-mcdonald/bootstrap-sass">bootstrap-sass</a></p>
-
-<hr />
-</div>
-  
-  
-
-
-    </article>
-  
-  
-    <article>
       
-  <header class="page-header">
-    
-      <h1 class="entry-title"><a href="/blog/2012/07/13/markdown/">轻量化标记语言Markdown</a></h1>
-    
-    
-      <p class="meta">
-        
 
 
 
@@ -984,280 +889,32 @@
   
 
 
-<time datetime="2012-07-13T14:20:00+08:00" pubdate data-updated="true">2012-07-13 14:20:00</time>
-        
-      </p>
+<time datetime="2012-07-18T11:24:00+08:00" pubdate data-updated="true">2012-07-18 11:24:00</time>
+      
+
+
+    </p>
     
-  </header>
-
-
-  <div class="entry-content"><h2>轻量化标记语言</h2>
-
-<p>指的是一类语法简单,容易阅读和修改，且富于表达力的标记语言(轻量化是相对于较复杂的标记语言，如SGML系，包括XML/HTML等)，最早起源于构造各类软件的文档，出于程序员们追求效率的天然本能，这些文档应该足够方便被阅读和修改，后来也逐渐扩散至web发布领域，尤其是blog和wiki，通常我们使用轻量化标记语言输入内容，然后由服务端程序将其转换成html等“较重的”结构化语言。</p>
-
-<p>在平常会经常遇到的轻量化标记语言大致有如下几种：</p>
-
-<ul>
-<li><p><strong>Markdown</strong> 现在最为流行的标记语言，最初的设计就是为了快速阅读和修改有格式的文本，并且很容易的转换成HTML，最早起源于perl社区</p></li>
-<li><p><strong>Textile</strong> 也是为了web发布所设计的，最早流行于php社区，后面也有了其他语言的实现</p></li>
-<li><p><strong>MediaWiki</strong> wikipedia使用的标记语言，最早被wikimedia基金会开发出来，基于php，之后逐渐被大部分的主流wiki采用</p></li>
-<li><p><strong>BBCode</strong> 这个常混论坛的人都比较熟悉了，Bulletin Board Code，主要用于生成各类论坛讨论版的帖子格式，目前主流论坛几乎都支持，缺点是比较混乱，标准不是很统一，很多大论坛甚至有自己的BBCode标签定义，在将来也许会慢慢被规则清晰统一的Markdown等取代掉。</p></li>
-<li><p><strong>Org-mode</strong> 很古老的标记语言，像我这样的Emacs厨对其相当热爱，功能也比起Markdown等更为强大，其开发目的是对各类事物进行系统的归纳和整理，因此也涵盖了时间管理等要素，缺点是经过了很多年的发展，已变得较为复杂，此外除了程序员向的服务（github等），并未得到广泛的支持。</p></li>
-</ul>
-
-
-<p>我自己的文档，包括这个blog的编辑和发布，是使用Markdown语言的，此外还有平常经常使用的github，Markdown也是其主要支持对象，所以下面就简单介绍一下Markdown，其他几类较新的标记语言，如Texile，实质也是大同小异，主要是看自己及所在社区的喜好了。</p>
-
-<hr />
-
-<h2>Markdown简介</h2>
-
-<p>主要参考自<a href="http://daringfireball.net/projects/markdown/syntax">Markdown官网</a></p>
-
-<h3>概览</h3>
-
-<h4>1. 哲学</h4>
-
-<p>   Markdown来源于纯文本email的格式设计，最重要的设计思想，是可读性高于一切，不止是渲染后的格式，本身也要易读和规整，因此，每一个表示符号都是经过精心选择的，让他们看上去和表达的意思达成一致。</p>
-
-<h4>2. 与HTML的关系</h4>
-
-<p>   Markdown的语法是作为web的书写语言而设计的，为了降低复杂性，她实现的是html表现层的一个子集，对于那些不包含在Markdown语法里的html标记，很简单，直接使用html就可以了，作为内嵌实现，一切出现在Markdown文档里的html标记都是可以被正确解析的。</p>
-
-<p>   Block元素稍微有点例外，它们必须被空行包围，而且开始和结束标签不能缩进，这个限制也还比较自然，例如：</p>
-
-<pre><code>   This is a regular paragraph.
-
-   &lt;table&gt;
-     &lt;tr&gt;
-       &lt;td&gt;Foo&lt;/td&gt;
-     &lt;/tr&gt;
-   &lt;/table&gt;
-
-   This is another regular paragraph.
-</code></pre>
-
-<h4>3. 特殊字符转义</h4>
-
-<p>Markdown这方面的实现很智能，它会根据html特殊符号(&lt;>&amp;)出现的上下文来决定是否转义，比如 <code>&amp;copy;</code> 不会被转义，直接输出&copy;，但如果是<code>AT&amp;T</code>，就会被转义以正常输出。</p>
-
-<h3>Block元素</h3>
-
-<h4>1. 段落和换行</h4>
-
-<p>在Markdown里，上下被空行包围的一行或多行文本，就是段落了，这里和其他的标记语言有所区别，对于空行，Markdown并不强制插入<code>&lt;br&gt;</code>标签，除非在某一行后面跟随了两个以上的空格，这样要比每一个换行都生成<code>&lt;br&gt;</code>好的多，也更容易使用css进行渲染。</p>
-
-<h4>2. 标题</h4>
-
-<p>Markdown支持两种方式的header</p>
-
-<ul>
-<li><p>Settext</p>
-
-<pre><code>  This is an H1
-  =============
-
-  This is an H2
-  -------------
-</code></pre></li>
-</ul>
-
-
-<p>任意数量的=和-都可以</p>
-
-<ul>
-<li><p>atx</p>
-
-<pre><code>  # This is an H1
-
-  ## This is an H2
-
-  ###### This is an H6
-</code></pre></li>
-</ul>
-
-
-<p>#的数量对应着header的级别(1-6), 也可以选择在后面加上#来闭合。</p>
-
-<h4>3. 引用</h4>
-
-<p>使用email式的引用格式（每一行前加上> )，不过可以简化如下：</p>
-
-<pre><code>&gt; This is a blockquote with two paragraphs. Lorem ipsum dolor sit amet,
-consectetuer adipiscing elit. Aliquam hendrerit mi posuere lectus.
-Vestibulum enim wisi, viverra nec, fringilla in, laoreet vitae, risus.
-
-&gt; Donec sit amet nisl. Aliquam semper ipsum sit amet velit. Suspendisse
-id sem consectetuer libero luctus adipiscing.
-</code></pre>
-
-<p>也支持嵌套引用，使用<code>&gt; &gt;</code>即可</p>
-
-<h4>4. 列表</h4>
-
-<ul>
-<li><p>无序列表（ul）</p>
-
-<pre><code>  *   Red
-  *   Green
-  *   Blue
-</code></pre></li>
-</ul>
-
-
-<p>无序列表可以使用(*-+)做前置标记，它们是可以互换的</p>
-
-<ul>
-<li><p>有序列表（ol）</p>
-
-<pre><code>  1. Bird
-  2. McHale
-  3. Parish
-</code></pre></li>
-</ul>
-
-
-<p>有序列表前的序号实际上是无关紧要的，可以用任意数字，不过还是按顺序加上的好，如果不想被转换成有序列表，可以对(.)进行转义，如</p>
-
-<pre><code>1986\. What a great season.       
-</code></pre>
-
-<p>列表项如果前后有空行，每项内会被当成段落处理，比如</p>
-
-<pre><code>*   Bird
-
-*   Magic
-</code></pre>
-
-<p>会变成</p>
-
-<pre><code>&lt;ul&gt;
-&lt;li&gt;&lt;p&gt;Bird&lt;/p&gt;&lt;/li&gt;
-&lt;li&gt;&lt;p&gt;Magic&lt;/p&gt;&lt;/li&gt;
-&lt;/ul&gt;
-</code></pre>
-
-<p>这点有时很方便，但值得注意，列表项里的每个段落，也需要一致的缩进。</p>
-
-<h4>5. 代码</h4>
-
-<p>只要在每行前，缩进至少4个空格，就可以产生code block，如下：</p>
-
-<pre><code>This is a normal paragraph:
-
-    &lt;div class="footer"&gt;
-        &amp;copy; 2004 Foo Corporation
-    &lt;/div&gt;
-</code></pre>
-
-<p>会使用pre和code标签生成，当然，代码块里的特殊符号会自动转义：</p>
-
-<pre><code>&lt;p&gt;This is a normal paragraph:&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;&amp;lt;div class="footer"&amp;gt;
-    &amp;amp;copy; 2004 Foo Corporation
-    &amp;lt;/div&amp;gt;
-&lt;/code&gt;&lt;/pre&gt;
-</code></pre>
-
-<h4>6. 水平分割线</h4>
-
-<p><code>&lt;hr&gt;</code>标签生成的方法是三个及以上的(*-_)，比如：</p>
-
-<pre><code>---
-____
-* * * * *
-</code></pre>
-
-<h3>Inline元素</h3>
-
-<h4>1. 链接</h4>
-
-<p>Markdown中的链接有两种，inline和reference</p>
-
-<ul>
-<li><p>inline link</p>
-
-<pre><code>  This is [an example](http://example.com/ "Title") inline link.
-</code></pre>
-
-<p>  生成：</p>
-
-<pre><code>  &lt;p&gt;This is &lt;a href="http://example.com/" title="Title"&gt;
-  an example&lt;/a&gt; inline link.&lt;/p&gt;    
-</code></pre></li>
-<li><p>reference link</p>
-
-<pre><code>  This is [an example][id] reference-style link.
-</code></pre>
-
-<p>  在文档的任何地方，可以定义id所指向的这个link label</p>
-
-<pre><code>  [id]: http://example.com/  "Optional Title Here"    
-</code></pre>
-
-<p>  甚至id可以省去</p>
-
-<pre><code>  I get 10 times more traffic from [Google][] than from
-  [Yahoo][] or [MSN][].
-
-  [google]: http://google.com/        "Google"
-  [yahoo]:  http://search.yahoo.com/  "Yahoo Search"
-  [msn]:    http://search.msn.com/    "MSN Search"
-</code></pre>
-
-<p>  这样可以让文档更清晰易读</p></li>
-<li><p>此外，Markdown还支持自动转化链接，如：</p>
-
-<pre><code>  &lt;http://example.com/&gt;
-</code></pre>
-
-<p>会生成</p>
-
-<pre><code>  &lt;a href="http://example.com/"&gt;http://example.com/&lt;/a&gt;    
-</code></pre></li>
-</ul>
-
-
-<h4>2. 强调</h4>
-
-<p>(*)和(_)会转成<code>&lt;em&gt;</code>，(**)和(__)则是<code>&lt;strong&gt;</code>, 想要普通的*可以用\*来转义</p>
-
-<h4>3. 代码</h4>
-
-<p>使用(`)来嵌入代码片段</p>
-
-<pre><code>Use the `printf()` function.
-</code></pre>
-
-<p>生成</p>
-
-<pre><code>&lt;p&gt;Use the &lt;code&gt;printf()&lt;/code&gt; function.&lt;/p&gt;    
-</code></pre>
-
-<h4>4. 图像</h4>
-
-<p>在Markdown里，图像的嵌入和链接一致，也分为inline和reference两种</p>
-
-<p>用法大致类似：</p>
-
-<pre><code>![Alt text](/path/to/img.jpg "Optional title")    
-</code></pre>
-
-<p>目前Markdown还不能定义图像的属性，如果你愿意的话，可以直接使用img标签</p>
+      <div class="sharing">
+  
+  
+  
 </div>
-  
-  
 
+    
+    
+    <ul class="pager">
+      
+      <li class="previous"><a class="basic-alignment left"
+        href="/blog/2012/07/16/style-framework/" title="Previous Post:
+        Twitter Bootstrap及其他样式框架">&laquo; Twitter Bootstrap及其他样式框架</a></li>
+      
+      <li><a href="/blog/archives">Blog Archives</a></li>
+      
+    </ul>
+  </footer>
+</article>
 
-    </article>
-  
-  <ul class="pager">
-    
-    <li><a href="/blog/archives">Blog Archives</a></li>
-    
-  </ul>
-</div>
 <aside class="sidebar-nav span3">
   
     <section class="well">
@@ -1282,6 +939,7 @@ ____
 
   
 </aside>
+
 
     </div>
   </div>

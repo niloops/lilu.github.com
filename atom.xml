@@ -4,7 +4,7 @@
   <title><![CDATA[lilu.life]]></title>
   <link href="http://lilu.github.com/atom.xml" rel="self"/>
   <link href="http://lilu.github.com/"/>
-  <updated>2012-07-16T16:29:31+08:00</updated>
+  <updated>2012-07-18T15:37:12+08:00</updated>
   <id>http://lilu.github.com/</id>
   <author>
     <name><![CDATA[lilu]]></name>
@@ -12,6 +12,763 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[SASS和Compass指南]]></title>
+    <link href="http://lilu.github.com/blog/2012/07/18/sass/"/>
+    <updated>2012-07-18T11:24:00+08:00</updated>
+    <id>http://lilu.github.com/blog/2012/07/18/sass</id>
+    <content type="html"><![CDATA[<h2>CSS预处理器</h2>
+
+<p>CSS预处理器(CSS Preprocessor)，是一种构架于css之上的高级语言，可以通过脚本编译生成CSS代码，其目的是为了让CSS开发者的工作更简单有趣，当前已经进入了较为成熟的阶段，基本上新的web开发项目大都已普遍使用。</p>
+
+<p>现在最主要的选择有：</p>
+
+<ul>
+<li><a href="http://sass-lang.com/">SASS</a> 2007年诞生，最早也是最成熟的CSS预处理器，拥有ruby社区的支持和compass这一最强大的css框架，目前受LESS影响，已经进化到了全面兼容CSS的SCSS。</li>
+<li><a href="http://lesscss.org]">LESS</a> 2009年出现，受SASS的影响较大，但又使用CSS的语法，让大部分开发者和设计师更容易上手，在ruby社区之外支持者远超过SASS，其缺点是比起SASS来，可编程功能不够，不过优点是简单和兼容CSS，反过来也影响了SASS演变到了SCSS的时代，著名的Twitter Bootstrap就是采用LESS做底层语言的。</li>
+<li><a href="http://learnboost.github.com/stylus/">Stylus</a>，2010年产生，来自Node.js社区，主要用来给Node项目进行CSS预处理支持，在此社区之内有一定支持者，在广泛的意义上人气还完全不如SASS和LESS。</li>
+</ul>
+
+
+<p>我较为推崇的组合是，<strong>SASS+Compass+Twitter Bootstrap+bootstrap-sass</strong>，这一组合能够获得最好的底层语言SASS，最好的框架Compass，和Bootstrap提供的最强大的UI组件库(被bootstrap-sass翻译成SASS的风格)。</p>
+
+<p>下面就对SASS的常用要素做一简单介绍，大部分例子来自SASS设计者Hampton Catlin的著作<a href="http://pragprog.com/book/pg_sass/pragmatic-guide-to-sass">Pragmatic Guide to Sass</a>，本文<em>不涉及</em>安装过程，命令行工具，和其他web开发框架(比如Rails)的结合，早期非SCSS的语法等内容，想了解更多的朋友可深入阅读上边这本书。</p>
+
+<hr />
+
+<h2>嵌套(nesting)</h2>
+
+<figure class='code'><figcaption><span>CSS选择器(Selector)经常要重复class,id和element的名称</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class='css'><span class='line'><span class="nc">.infobox</span> <span class="p">{</span><span class="k">width</span><span class="o">:</span> <span class="m">200px</span><span class="p">;}</span>
+</span><span class='line'><span class="nc">.infobox</span> <span class="nc">.message</span> <span class="p">{</span><span class="k">border</span><span class="o">:</span> <span class="m">1px</span> <span class="k">solid</span> <span class="nb">red</span><span class="p">;}</span>
+</span><span class='line'><span class="nc">.infobox</span> <span class="nc">.message</span> <span class="o">&gt;</span> <span class="nc">.title</span> <span class="p">{</span><span class="k">color</span><span class="o">:</span> <span class="nb">red</span><span class="p">;}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+
+
+<figure class='code'><figcaption><span>SASS可以让选择器嵌套，做到DRY</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+</pre></td><td class='code'><pre><code class='sass'><span class='line'><span class="nc">.infobox</span> <span class="err">{</span>
+</span><span class='line'>    <span class="na">width</span><span class="o">:</span> <span class="mi">200</span><span class="kt">px</span><span class="err">;</span>
+</span><span class='line'>    <span class="nc">.message</span> <span class="err">{</span>
+</span><span class='line'>        <span class="na">border</span><span class="o">:</span> <span class="mi">1</span><span class="kt">px</span> <span class="no">solid</span> <span class="nb">red</span><span class="err">;</span>
+</span><span class='line'>        <span class="na">&gt;</span><span class="err"> </span><span class="na">.title</span><span class="err"> </span><span class="na">{color</span><span class="o">:</span> <span class="nb">red</span><span class="err">;}</span>
+</span><span class='line'>    <span class="err">}</span>
+</span><span class='line'><span class="err">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>对于某些需要引入父选择器名称的情况，SASS使用&amp;代替</p>
+
+<figure class='code'><figcaption><span>CSS会让同样元素的样式变得分散</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+</pre></td><td class='code'><pre><code class='css'><span class='line'><span class="nc">.infobox</span> <span class="p">{</span><span class="k">color</span><span class="o">:</span> <span class="nb">blue</span><span class="p">;}</span>
+</span><span class='line'><span class="nc">.user</span> <span class="nc">.infobox</span> <span class="p">{</span><span class="k">color</span><span class="o">:</span> <span class="nb">gray</span><span class="p">;}</span>
+</span><span class='line'><span class="nc">.message</span> <span class="p">{</span><span class="k">color</span><span class="o">:</span> <span class="nb">gray</span><span class="p">;}</span>
+</span><span class='line'><span class="nc">.message.new</span> <span class="p">{</span><span class="k">color</span><span class="o">:</span> <span class="nb">red</span><span class="p">;}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+
+
+<figure class='code'><figcaption><span>SASS可以让他们在一起</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+</pre></td><td class='code'><pre><code class='sass'><span class='line'><span class="nc">.infobox</span> <span class="err">{</span>
+</span><span class='line'>    <span class="na">color</span><span class="o">:</span> <span class="nb">blue</span><span class="err">;</span>
+</span><span class='line'>    <span class="na">.user</span><span class="err"> </span><span class="na">&amp;</span><span class="err"> </span><span class="na">{color</span><span class="o">:</span> <span class="nb">gray</span><span class="err">;}</span>
+</span><span class='line'><span class="err">}</span>
+</span><span class='line'><span class="nc">.message</span> <span class="err">{</span>
+</span><span class='line'>    <span class="na">color</span><span class="o">:</span> <span class="nb">gray</span><span class="err">;</span>
+</span><span class='line'>    <span class="na">&amp;.new</span><span class="err"> </span><span class="na">{color</span><span class="o">:</span> <span class="nb">red</span><span class="err">;}</span>
+</span><span class='line'><span class="err">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>对于当前做跨平台web开发来说，@media非常常用，而SASS的嵌套会区别对待</p>
+
+<figure class='code'><figcaption><span>CSS</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+</pre></td><td class='code'><pre><code class='css'><span class='line'><span class="nc">.main</span> <span class="p">{</span>
+</span><span class='line'>    <span class="k">font-size</span><span class="o">:</span> <span class="m">15px</span><span class="p">;</span>
+</span><span class='line'><span class="p">}</span>
+</span><span class='line'>
+</span><span class='line'><span class="k">@media</span> <span class="nt">screen</span> <span class="nt">and</span> <span class="o">(</span><span class="nt">max-width</span><span class="o">:</span> <span class="nt">320px</span><span class="o">)</span> <span class="p">{</span>
+</span><span class='line'>    <span class="nc">.main</span> <span class="p">{</span>
+</span><span class='line'>        <span class="k">font-size</span><span class="o">:</span> <span class="m">35px</span><span class="p">;</span>
+</span><span class='line'>    <span class="p">}</span>
+</span><span class='line'><span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+
+
+<figure class='code'><figcaption><span>SASS让同样的选择器在不同media条件下的样式在一起</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+</pre></td><td class='code'><pre><code class='css'><span class='line'><span class="nc">.main</span> <span class="p">{</span>
+</span><span class='line'>    <span class="k">font-size</span><span class="o">:</span> <span class="m">15px</span><span class="p">;</span>
+</span><span class='line'>    <span class="o">@</span><span class="n">media</span> <span class="n">screen</span> <span class="n">and</span> <span class="p">(</span><span class="k">max-width</span><span class="o">:</span> <span class="m">320px</span><span class="p">)</span> <span class="err">{</span>
+</span><span class='line'>        <span class="k">font-size</span><span class="o">:</span> <span class="m">35px</span><span class="p">;</span>
+</span><span class='line'>    <span class="p">}</span>
+</span><span class='line'><span class="err">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<hr />
+
+<h2>变量(variables)</h2>
+
+<p>变量是编程语言的基石，掌握变量的定义和使用，是SASS编程的起点。</p>
+
+<figure class='code'><figcaption><span>CSS中同样的值不得不重复很多次</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+</pre></td><td class='code'><pre><code class='css'><span class='line'><span class="nt">body</span> <span class="p">{</span><span class="k">background</span><span class="o">:</span> <span class="m">#336699</span><span class="p">;}</span>
+</span><span class='line'><span class="nt">body</span> <span class="nf">#wrapper</span> <span class="p">{</span>
+</span><span class='line'>    <span class="k">width</span><span class="o">:</span> <span class="m">300px</span><span class="p">;</span>
+</span><span class='line'>    <span class="k">background</span><span class="o">:</span> <span class="nb">white</span><span class="p">;</span>
+</span><span class='line'>    <span class="k">border</span><span class="o">:</span> <span class="m">#eee</span><span class="p">;</span>
+</span><span class='line'><span class="p">}</span>
+</span><span class='line'><span class="nt">body</span> <span class="nf">#wrapper</span> <span class="nt">h1</span> <span class="p">{</span><span class="k">color</span><span class="o">:</span> <span class="m">#336699</span><span class="p">;}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+
+
+<figure class='code'><figcaption><span>SASS有了变量，只需要改一次，而且往往相关值一起定义的，方便查找</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+</pre></td><td class='code'><pre><code class='sass'><span class='line'><span class="c1">//可以定义全局变量</span>
+</span><span class='line'><span class="nv">$primary_color</span><span class="o">:</span> <span class="mh">#369</span><span class="err">;</span>
+</span><span class='line'><span class="nv">$secondary_color</span><span class="o">:</span> <span class="mh">#eee</span><span class="err">;</span>
+</span><span class='line'>
+</span><span class='line'><span class="nt">body</span> <span class="err">{</span>
+</span><span class='line'>    <span class="c1">//也可以定义局部变量</span>
+</span><span class='line'>    <span class="nv">$page_width</span><span class="o">:</span> <span class="mi">300</span><span class="kt">px</span><span class="err">;</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="na">background</span><span class="o">:</span> <span class="nv">$primary_color</span><span class="err">;</span>
+</span><span class='line'>    <span class="nn">#wrapper</span> <span class="err">{</span>
+</span><span class='line'>        <span class="na">width</span><span class="o">:</span> <span class="nv">$page_width</span><span class="err">;</span>
+</span><span class='line'>        <span class="na">background</span><span class="o">:</span> <span class="nb">white</span><span class="err">;</span>
+</span><span class='line'>        <span class="na">border</span><span class="o">:</span> <span class="nv">$secondary_color</span><span class="err">;</span>
+</span><span class='line'>        <span class="na">h1</span><span class="err"> </span><span class="na">{color</span><span class="o">:</span> <span class="nv">$primary_color</span><span class="err">;</span> <span class="err">}</span>
+</span><span class='line'>    <span class="err">}</span>
+</span><span class='line'><span class="err">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>关于上边代码中的全局和局部变量，这里稍微说一下SASS的缺点，同名局部变量会覆盖全局变量的值，这很不自然</p>
+
+<figure class='code'><figcaption><span>SASS这一点不如LESS</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+</pre></td><td class='code'><pre><code class='sass'><span class='line'><span class="nv">$color</span><span class="o">:</span> <span class="nb">black</span><span class="err">;</span>
+</span><span class='line'><span class="nc">.scoped</span> <span class="err">{</span>
+</span><span class='line'>    <span class="nv">$color</span><span class="o">:</span> <span class="nb">white</span><span class="err">;</span>
+</span><span class='line'>    <span class="na">color</span><span class="o">:</span> <span class="nv">$color</span><span class="err">;</span>
+</span><span class='line'><span class="err">}</span>
+</span><span class='line'><span class="nc">.unscoped</span> <span class="err">{</span>
+</span><span class='line'>    <span class="c1">// LESS = black (global)</span>
+</span><span class='line'>    <span class="c1">// SASS = white (overwritten by local)</span>
+</span><span class='line'>    <span class="na">color</span><span class="o">:</span> <span class="nv">$color</span><span class="err">;</span>
+</span><span class='line'><span class="err">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>有了变量，自然可以进行对值的计算</p>
+
+<figure class='code'><figcaption><span>Calculating in SASS</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+</pre></td><td class='code'><pre><code class='sass'><span class='line'><span class="c1">//以下代码中修改页面宽度只需要改一次</span>
+</span><span class='line'><span class="nv">$width</span><span class="o">:</span> <span class="mi">500</span><span class="kt">px</span><span class="err">;</span>
+</span><span class='line'><span class="nv">$sidebar_percent</span><span class="o">:</span> <span class="mi">0</span><span class="mf">.2</span><span class="err">;</span>
+</span><span class='line'><span class="nn">#page</span> <span class="err">{</span>
+</span><span class='line'>    <span class="na">width</span><span class="o">:</span> <span class="nv">$width</span><span class="err">;</span>
+</span><span class='line'>    <span class="na">#sidebar</span><span class="err"> </span><span class="na">{width</span><span class="o">:</span> <span class="nv">$width</span> <span class="o">*</span> <span class="nv">$sidebar_percent</span><span class="err">;}</span>
+</span><span class='line'>    <span class="na">#content</span><span class="err"> </span><span class="na">{width</span><span class="o">:</span> <span class="nv">$width</span> <span class="o">*</span> <span class="p">(</span><span class="mi">1</span> <span class="o">-</span> <span class="nv">$sidebar_percent</span><span class="p">)</span><span class="err">;}</span>
+</span><span class='line'><span class="err">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>变量还可以嵌入字符串中，这在编程语言中称为<strong>插值</strong>(Interpolating)</p>
+
+<figure class='code'><figcaption><span>CSS </span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+</pre></td><td class='code'><pre><code class='css'><span class='line'><span class="nc">.car.bmw_make</span> <span class="p">{</span><span class="k">color</span><span class="o">:</span> <span class="nb">blue</span><span class="p">;}</span>
+</span><span class='line'><span class="nc">.car.bmw_make</span> <span class="nc">.image</span> <span class="p">{</span>
+</span><span class='line'>    <span class="k">background</span><span class="o">:</span> <span class="sx">url(&quot;images/bmw.png&quot;)</span><span class="p">;</span>
+</span><span class='line'><span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+
+
+<figure class='code'><figcaption><span>Interpolating in SASS</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+</pre></td><td class='code'><pre><code class='sass'><span class='line'><span class="nv">$car</span><span class="o">:</span> <span class="s2">&quot;bmw&quot;</span><span class="err">;</span>
+</span><span class='line'>
+</span><span class='line'><span class="nc">.car.</span><span class="si">#{</span><span class="nv">$car</span><span class="si">}</span><span class="nc">_make</span> <span class="err">{</span><span class="nt">s</span>
+</span><span class='line'>    <span class="na">color</span><span class="o">:</span> <span class="nb">blue</span><span class="err">;</span>
+</span><span class='line'>    <span class="nc">.image</span> <span class="err">{</span>
+</span><span class='line'>        <span class="na">background</span><span class="o">:</span> <span class="sx">url(&quot;images/</span><span class="si">#{</span><span class="nv">$car</span><span class="si">}</span><span class="sx">.png&quot;)</span><span class="err">;</span>
+</span><span class='line'>    <span class="err">}</span>
+</span><span class='line'><span class="err">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<hr />
+
+<h2>函数(function)</h2>
+
+<p>在编程语言中，函数是仅此于变量的基本结构体，SASS中有很多预定义函数，这里用颜色相关的函数举例如下</p>
+
+<figure class='code'><figcaption><span>CSS需要定义整套颜色</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class='css'><span class='line'><span class="nc">.main</span> <span class="p">{</span><span class="k">color</span><span class="o">:</span> <span class="m">#336699</span><span class="p">;}</span>
+</span><span class='line'><span class="nc">.lighten</span> <span class="p">{</span><span class="k">color</span><span class="o">:</span> <span class="m">#6699cc</span><span class="p">;}</span>
+</span><span class='line'><span class="nc">.saturate</span> <span class="p">{</span><span class="k">color</span><span class="o">:</span> <span class="m">#1466b8</span><span class="p">;}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+
+
+<figure class='code'><figcaption><span>SASS只需要定义一个基本颜色，其他可以通过函数获取</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+</pre></td><td class='code'><pre><code class='sass'><span class='line'><span class="nv">$main_color</span><span class="o">:</span> <span class="mh">#336699</span><span class="err">;</span>
+</span><span class='line'><span class="na">.main</span><span class="err"> </span><span class="na">{color</span><span class="o">:</span> <span class="nv">$main_color</span><span class="err">;}</span>
+</span><span class='line'><span class="na">.lighten</span><span class="err"> </span><span class="na">{color</span><span class="o">:</span> <span class="nf">lighten</span><span class="p">(</span><span class="nv">$main_color</span><span class="o">,</span> <span class="mi">20</span><span class="kt">%</span><span class="p">)</span><span class="err">;}</span>
+</span><span class='line'><span class="na">.saturate</span><span class="err"> </span><span class="na">{color</span><span class="o">:</span> <span class="nf">saturate</span><span class="p">(</span><span class="nv">$main_color</span><span class="o">,</span> <span class="mi">30</span><span class="kt">%</span><span class="p">)</span><span class="err">;}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>SASS的底层函数相当完整，如果会使用ruby的话，也可以自定义函数，完整列表在<a href="http://sass-lang.com/docs/yardoc/Sass/Script/Functions.html">这里</a></p>
+
+<hr />
+
+<h2>导入(import)</h2>
+
+<p>在样式表过于复杂的时候，你可以将其按功能模块分割成不同的文件进行开发，SASS会将这些小文件统一编译成一个完整的CSS文件，与简单的包含多个文件不同，SASS的导入，是可以将变量，Mixin，等等一起导入的</p>
+
+<figure class='code'><figcaption><span>_colors.scss(被导入的SASS文件，通常用_开头，它们在编译过程中不会生成CSS文件)</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='sass'><span class='line'><span class="nv">$main_color</span><span class="o">:</span> <span class="mh">#336699</span><span class="err">;</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+
+
+<figure class='code'><figcaption><span>application.scss 导入文件</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class='sass'><span class='line'><span class="c1">//SASS会自动加上_去寻找文件</span>
+</span><span class='line'><span class="k">@import</span> <span class="s">&quot;colors&quot;;</span>
+</span><span class='line'><span class="na">#page</span><span class="err"> </span><span class="na">{color</span><span class="o">:</span> <span class="nv">$main_color</span><span class="err">;}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<hr />
+
+<h2>扩展(extend)</h2>
+
+<p>@extend可以复制其他class或id的指定样式，让你无须再将逻辑上不相关的class放在一起，当然更不用复制粘贴了</p>
+
+<figure class='code'><figcaption><span>CSS</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class='css'><span class='line'><span class="nc">.blue_button</span><span class="o">,</span> <span class="nc">.checkout_button</span> <span class="p">{</span><span class="k">background</span><span class="o">:</span> <span class="m">#336699</span><span class="p">;}</span>
+</span><span class='line'><span class="nc">.blue_button</span> <span class="p">{</span><span class="k">color</span><span class="o">:</span> <span class="nb">white</span><span class="p">;}</span>
+</span><span class='line'><span class="nc">.checkout_button</span> <span class="p">{</span><span class="k">color</span><span class="o">:</span> <span class="nb">green</span><span class="p">;}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+
+
+<figure class='code'><figcaption><span>SASS @extend</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+</pre></td><td class='code'><pre><code class='sass'><span class='line'><span class="nc">.blue_button</span> <span class="err">{</span>
+</span><span class='line'>    <span class="na">background</span><span class="o">:</span> <span class="mh">#336699</span><span class="err">;</span>
+</span><span class='line'>    <span class="na">color</span><span class="o">:</span> <span class="nb">white</span><span class="err">;</span>
+</span><span class='line'><span class="err">}</span>
+</span><span class='line'>
+</span><span class='line'><span class="nc">.checkout_button</span> <span class="err">{</span>
+</span><span class='line'>    <span class="k">@extend</span> <span class="nc">.blue_button</span><span class="o">;</span>
+</span><span class='line'>    <span class="na">color</span><span class="o">:</span> <span class="nb">green</span><span class="err">;</span>
+</span><span class='line'><span class="err">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<hr />
+
+<h2>混入(mixin)</h2>
+
+<p>Mixin可以说是SASS等CSS预处理语言最强大的要素了，简单来说，mixin可以将一部分样式抽出，作为单独定义的模块，被很多选择器重复使用。</p>
+
+<p>Mixin可以定义在单独文件中</p>
+
+<figure class='code'><figcaption><span>_text.scss</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+</pre></td><td class='code'><pre><code class='sass'><span class='line'><span class="k">@mixin</span><span class="nf"> blue_text</span> <span class="err">{</span>
+</span><span class='line'>    <span class="na">color</span><span class="o">:</span> <span class="mh">#336699</span><span class="err">;</span>
+</span><span class='line'>    <span class="na">font-family</span><span class="o">:</span> <span class="n">helvetica</span><span class="o">,</span> <span class="n">arial</span><span class="o">,</span> <span class="no">sans-serif</span><span class="err">;</span>
+</span><span class='line'>    <span class="na">font-size</span><span class="o">:</span> <span class="mi">20</span><span class="kt">px</span><span class="err">;</span>
+</span><span class='line'>    <span class="na">font-variant</span><span class="o">:</span> <span class="no">small-caps</span><span class="err">;</span>
+</span><span class='line'><span class="err">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>导入并使用mixin</p>
+
+<figure class='code'><figcaption><span>main.scss</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+</pre></td><td class='code'><pre><code class='sass'><span class='line'><span class="k">@import</span> <span class="s">&quot;text&quot;;</span>
+</span><span class='line'>
+</span><span class='line'><span class="nc">.product_title</span> <span class="err">{</span>
+</span><span class='line'>    <span class="k">@include</span><span class="nd"> blue_text</span><span class="err">;</span>
+</span><span class='line'><span class="err">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>mixin与extend看似实现的功能差不多，但实际上除了语义上的不同外，mixin更为强大和复杂，因为她有参数(arguments)，参数还可以有默认值</p>
+
+<p>实现跨浏览器圆角</p>
+
+<figure class='code'><figcaption><span>Cross browser Rounded borders mixin </span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+</pre></td><td class='code'><pre><code class='sass'><span class='line'><span class="k">@mixin</span><span class="nf"> rounded_borders</span><span class="p">(</span><span class="nv">$color</span><span class="o">,</span> <span class="nv">$width</span><span class="o">:</span> <span class="mi">5</span><span class="kt">px</span><span class="o">,</span> <span class="nv">$rounding</span><span class="o">:</span> <span class="mi">5</span><span class="kt">px</span><span class="p">)</span> <span class="err">{</span>
+</span><span class='line'>    <span class="na">-moz-border-radius</span><span class="o">:</span> <span class="nv">$rounding</span> <span class="nv">$rounding</span><span class="err">;</span>
+</span><span class='line'>    <span class="na">-webkit-border-radius</span><span class="o">:</span> <span class="nv">$rounding</span> <span class="nv">$rounding</span><span class="err">;</span>
+</span><span class='line'>    <span class="na">-khtml-border-radius</span><span class="o">:</span> <span class="nv">$rounding</span> <span class="nv">$rounding</span><span class="err">;</span>
+</span><span class='line'>    <span class="na">-o-border-radius</span><span class="o">:</span> <span class="nv">$rounding</span> <span class="nv">$rounding</span><span class="err">;</span>
+</span><span class='line'>    <span class="na">border-radius</span><span class="o">:</span> <span class="nv">$rounding</span> <span class="nv">$rounding</span><span class="err">;</span>
+</span><span class='line'>    <span class="na">border</span><span class="o">:</span> <span class="nv">$width</span> <span class="nv">$color</span> <span class="no">solid</span><span class="err">;</span>
+</span><span class='line'><span class="err">}</span>
+</span><span class='line'>
+</span><span class='line'><span class="nc">.header</span> <span class="err">{</span>
+</span><span class='line'>    <span class="k">@include</span><span class="nd"> rounded_borders</span><span class="p">(</span><span class="mh">#336699</span><span class="o">,</span> <span class="mi">3</span><span class="kt">px</span><span class="p">)</span><span class="err">;</span>
+</span><span class='line'><span class="err">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>实现跨浏览器透明度</p>
+
+<figure class='code'><figcaption><span>Cross browser Opacity mixin</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+</pre></td><td class='code'><pre><code class='sass'><span class='line'><span class="k">@mixin</span><span class="nf"> opacity</span><span class="p">(</span><span class="nv">$opacity</span><span class="p">)</span> <span class="err">{</span>
+</span><span class='line'>    <span class="na">filter</span><span class="o">:</span> <span class="nf">alpha</span><span class="p">(</span><span class="no">opacity</span><span class="o">=</span><span class="si">#{</span><span class="nv">$opacity</span><span class="o">*</span><span class="mi">100</span><span class="si">}</span><span class="p">)</span><span class="err">;</span> <span class="c1">// IE 5-9+</span>
+</span><span class='line'>    <span class="na">opacity</span><span class="o">:</span> <span class="nv">$opacity</span><span class="err">;</span>
+</span><span class='line'><span class="err">}</span>
+</span><span class='line'>
+</span><span class='line'><span class="nc">.h1</span> <span class="err">{</span>
+</span><span class='line'>    <span class="k">@include</span><span class="nd"> opacity</span><span class="p">(</span><span class="mi">0</span><span class="mf">.6</span><span class="p">)</span><span class="err">;</span>
+</span><span class='line'><span class="err">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<hr />
+
+<h2>迭代(each)</h2>
+
+<p>在主流语言中，迭代属于循环实现的一种功能，例如ruby的each或者python的for in，sass使用@each实现</p>
+
+<figure class='code'><figcaption><span>CSS中要写很多同样的代码</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+</pre></td><td class='code'><pre><code class='css'><span class='line'><span class="nc">.thom_picture</span> <span class="p">{</span><span class="k">background-image</span><span class="o">:</span> <span class="sx">url(&quot;/image/thom.jpg&quot;)</span><span class="p">;}</span>
+</span><span class='line'><span class="nc">.jonny_picture</span> <span class="p">{</span><span class="k">background-image</span><span class="o">:</span> <span class="sx">url(&quot;/image/jonny.jpg&quot;)</span><span class="p">;}</span>
+</span><span class='line'><span class="nc">.colin_picture</span> <span class="p">{</span><span class="k">background-image</span><span class="o">:</span> <span class="sx">url(&quot;/image/colin.jpg&quot;)</span><span class="p">;}</span>
+</span><span class='line'><span class="nc">.phil_picture</span> <span class="p">{</span><span class="k">background-image</span><span class="o">:</span> <span class="sx">url(&quot;/image/phil.jpg&quot;)</span><span class="p">;}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+
+
+<figure class='code'><figcaption><span>SASS使用@each变得非常简单</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+</pre></td><td class='code'><pre><code class='sass'><span class='line'><span class="k">@each</span> <span class="err">$</span><span class="nt">member</span> <span class="nt">in</span> <span class="nt">thom</span><span class="o">,</span> <span class="nt">jonny</span><span class="o">,</span> <span class="nt">colin</span><span class="o">,</span> <span class="nt">phil</span> <span class="err">{</span>
+</span><span class='line'>    <span class="nc">.</span><span class="si">#{</span><span class="nv">$member</span><span class="si">}</span><span class="nc">_picture</span> <span class="err">{</span>
+</span><span class='line'>        <span class="na">background-image</span><span class="o">:</span> <span class="sx">url(&quot;/image/</span><span class="si">#{</span><span class="nv">$member</span><span class="si">}</span><span class="sx">.jpg&quot;)</span><span class="err">;</span>
+</span><span class='line'>    <span class="err">}</span>
+</span><span class='line'><span class="err">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<hr />
+
+<h2>条件(condition)</h2>
+
+<p>说到编程基本控制流，除了循环就是条件了，sass中使用@if进行条件控制</p>
+
+<figure class='code'><figcaption><span>判断式中可以使用==/>/<等通常判别符</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+</pre></td><td class='code'><pre><code class='sass'><span class='line'><span class="k">@mixin</span><span class="nf"> country_color</span><span class="p">(</span><span class="nv">$country</span><span class="p">)</span> <span class="err">{</span>
+</span><span class='line'>    <span class="k">@if</span> <span class="nv">$country</span> <span class="o">==</span> <span class="n">france</span> <span class="err">{</span>
+</span><span class='line'>        <span class="na">color</span><span class="o">:</span> <span class="nb">blue</span><span class="err">;</span>
+</span><span class='line'>    <span class="err">}</span>
+</span><span class='line'>    <span class="k">@else</span> <span class="err">{</span>
+</span><span class='line'>        <span class="na">color</span><span class="o">:</span> <span class="nb">red</span><span class="err">;</span>
+</span><span class='line'>    <span class="err">}</span>
+</span><span class='line'><span class="err">}</span>
+</span><span class='line'>
+</span><span class='line'><span class="nc">.england</span> <span class="err">{</span>
+</span><span class='line'>    <span class="k">@include</span><span class="nd"> country_color</span><span class="p">(</span><span class="n">england</span><span class="p">)</span><span class="err">;</span>
+</span><span class='line'><span class="err">}</span>
+</span><span class='line'><span class="nc">.france</span> <span class="err">{</span>
+</span><span class='line'>    <span class="k">@include</span><span class="nd"> country_color</span><span class="p">(</span><span class="n">france</span><span class="p">)</span><span class="err">;</span>
+</span><span class='line'><span class="err">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<hr />
+
+<h2>Compass</h2>
+
+<p>以上SASS的基本要素都介绍的差不多了，不过对于在实践中使用SASS来说，强大的<a href="http://compass-style.org/">Compass</a>是必不可少的，她由SASS的核心团队成员Chris Eppstein创建，是一个非常丰富的样式框架，包括大量定义好的mixin，函数，以及对SASS的扩展。</p>
+
+<p>这里非常简要地介绍一些常用功能</p>
+
+<h3>Reset</h3>
+
+<p>Compass提供一个基于大名鼎鼎的Eric Meyer的Reset CSS，我还没有和Twitter Bootstrap采用的Normalize.css一一比对过，不过compass reset的好处是可以分不同的模块reset</p>
+
+<figure class='code'><figcaption><span>compass reset</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+</pre></td><td class='code'><pre><code class='sass'><span class='line'><span class="c1">//global reset</span>
+</span><span class='line'><span class="k">@import</span> <span class="s">&quot;compass/reset&quot;;</span>
+</span><span class='line'>
+</span><span class='line'><span class="c1">//partial reset </span>
+</span><span class='line'><span class="k">@import</span> <span class="s">&quot;compass/reset/utilities&quot;;</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h3>CSS3</h3>
+
+<p>前边提到的圆角和透明mixin实际上都在Compass中提供，当然还有几乎所有的css3相关模块，实际上有了Compass，不需要再写任何浏览器特定的代码了。</p>
+
+<figure class='code'><figcaption><span>compass rounder corners</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+</pre></td><td class='code'><pre><code class='sass'><span class='line'><span class="k">@import</span> <span class="s">&quot;compass/css3/border-radius&quot;;</span>
+</span><span class='line'>
+</span><span class='line'><span class="nc">.header</span> <span class="err">{</span>
+</span><span class='line'>    <span class="k">@include</span><span class="nd"> border-radius</span><span class="p">(</span><span class="mi">4</span><span class="kt">px</span><span class="p">)</span><span class="err">;</span>
+</span><span class='line'><span class="err">}</span>
+</span><span class='line'>
+</span><span class='line'><span class="nc">.header_top_left_rounded</span> <span class="err">{</span>
+</span><span class='line'>    <span class="k">@include</span><span class="nd"> border-top-left-radius</span><span class="p">(</span><span class="mi">4</span><span class="kt">px</span><span class="p">)</span><span class="err">;</span>
+</span><span class='line'><span class="err">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h3>Typography</h3>
+
+<p>Compass有很多基本mixin可以方便地定制各种表现层元素</p>
+
+<p>比如水平列表，这个在顶部导航栏中相当常用</p>
+
+<figure class='code'><figcaption><span>Compass</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+</pre></td><td class='code'><pre><code class='sass'><span class='line'><span class="k">@import</span> <span class="s">&quot;compass/typography/lists/horizontal-list&quot;;</span>
+</span><span class='line'>
+</span><span class='line'><span class="nt">ul</span><span class="nc">.horiz</span> <span class="err">{</span>
+</span><span class='line'>    <span class="k">@include</span><span class="nd"> horizontal-list</span><span class="p">(</span><span class="mi">4</span><span class="kt">px</span><span class="p">)</span><span class="err">;</span>
+</span><span class='line'><span class="err">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>我们看一眼在css中的对应实现多么复杂</p>
+
+<figure class='code'><figcaption><span>CSS实现</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+</pre></td><td class='code'><pre><code class='css'><span class='line'><span class="nt">ul</span><span class="nc">.horiz</span> <span class="p">{</span>
+</span><span class='line'>    <span class="k">margin</span><span class="o">:</span> <span class="m">0</span><span class="p">;</span>
+</span><span class='line'>    <span class="k">padding</span><span class="o">:</span> <span class="m">0</span><span class="p">;</span>
+</span><span class='line'>    <span class="k">border</span><span class="o">:</span> <span class="m">0</span><span class="p">;</span>
+</span><span class='line'>    <span class="k">overflow</span><span class="o">:</span> <span class="k">hidden</span><span class="p">;</span>
+</span><span class='line'>    <span class="o">*</span><span class="n">zoom</span><span class="o">:</span> <span class="m">1</span><span class="p">;</span>
+</span><span class='line'><span class="p">}</span>
+</span><span class='line'><span class="nt">ul</span><span class="nc">.horiz</span> <span class="nt">li</span> <span class="p">{</span>
+</span><span class='line'>    <span class="k">list-style-image</span><span class="o">:</span> <span class="k">none</span><span class="p">;</span>
+</span><span class='line'>    <span class="k">list-style-type</span><span class="o">:</span> <span class="k">none</span><span class="p">;</span>
+</span><span class='line'>    <span class="k">margin-left</span><span class="o">:</span> <span class="m">0px</span><span class="p">;</span>
+</span><span class='line'>    <span class="k">white-space</span><span class="o">:</span> <span class="k">nowrap</span><span class="p">;</span>
+</span><span class='line'>    <span class="k">display</span><span class="o">:</span> <span class="k">inline</span><span class="p">;</span>
+</span><span class='line'>    <span class="k">float</span><span class="o">:</span> <span class="k">left</span><span class="p">;</span>
+</span><span class='line'>    <span class="k">padding-left</span><span class="o">:</span> <span class="m">4px</span><span class="p">;</span>
+</span><span class='line'>    <span class="k">padding-right</span><span class="o">:</span> <span class="m">4px</span><span class="p">;</span>
+</span><span class='line'><span class="p">}</span>
+</span><span class='line'><span class="nt">ul</span><span class="nc">.horiz</span> <span class="nt">li</span><span class="nd">:first-child</span><span class="o">,</span> <span class="nt">ul</span><span class="nc">.horiz</span> <span class="nt">li</span><span class="nc">.first</span> <span class="p">{</span>
+</span><span class='line'>    <span class="k">padding-left</span><span class="o">:</span> <span class="m">0</span><span class="p">;</span>
+</span><span class='line'><span class="p">}</span>
+</span><span class='line'><span class="nt">ul</span><span class="nc">.horiz</span> <span class="nt">li</span><span class="nd">:last-child</span> <span class="p">{</span>
+</span><span class='line'>    <span class="k">padding-right</span><span class="o">:</span> <span class="m">0</span><span class="p">;</span>
+</span><span class='line'><span class="p">}</span>
+</span><span class='line'><span class="nt">ul</span><span class="nc">.horiz</span> <span class="nt">li</span><span class="nc">.last</span> <span class="p">{</span>
+</span><span class='line'>    <span class="k">padding-right</span><span class="o">:</span> <span class="m">0</span><span class="p">;</span>
+</span><span class='line'><span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h3>Layout</h3>
+
+<p>Compass也提供一些影响布局的方法，比如将一个元素延展(Stretch)</p>
+
+<p>HTML如下</p>
+
+<figure class='code'><figcaption><span>HTML for stretching </span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+</pre></td><td class='code'><pre><code class='html'><span class='line'><span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">&quot;stretch_box&quot;</span><span class="nt">&gt;</span>
+</span><span class='line'>    <span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">&quot;stretched</span><span class="nt">&gt;</span>
+</span><span class='line'>        Stretched fully!
+</span><span class='line'>    <span class="nt">&lt;/div&gt;</span>
+</span><span class='line'><span class="nt">&lt;/div&gt;</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+
+
+<figure class='code'><figcaption><span>compass stretching</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+</pre></td><td class='code'><pre><code class='sass'><span class='line'><span class="k">@import</span> <span class="s">&quot;compass/layout/stretching&quot;;</span>
+</span><span class='line'>
+</span><span class='line'><span class="c1">//stretched fully</span>
+</span><span class='line'><span class="nc">.stretched</span> <span class="err">{</span>
+</span><span class='line'>    <span class="k">@include</span><span class="nd"> stretch</span><span class="err">;</span>
+</span><span class='line'><span class="err">}</span>
+</span><span class='line'>
+</span><span class='line'><span class="c1">//stretched with gap</span>
+</span><span class='line'><span class="nc">.stretched</span> <span class="err">{</span>
+</span><span class='line'>    <span class="k">@include</span><span class="nd"> stretch</span><span class="p">(</span><span class="mi">12</span><span class="kt">px</span><span class="o">,</span> <span class="mi">12</span><span class="kt">px</span><span class="o">,</span> <span class="mi">12</span><span class="kt">px</span><span class="o">,</span> <span class="mi">12</span><span class="kt">px</span><span class="p">)</span><span class="err">;</span>
+</span><span class='line'><span class="err">}</span>
+</span><span class='line'>
+</span><span class='line'><span class="c1">//stretched horizontally</span>
+</span><span class='line'><span class="nc">.stretched</span> <span class="err">{</span>
+</span><span class='line'>    <span class="k">@include</span><span class="nd"> stretch-x</span><span class="err">;</span>
+</span><span class='line'><span class="err">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h3>Utilities</h3>
+
+<p>Compass还有很多实用功能模块，比如很烦人但在布局中经常要使用的clearfix，有了这个mixin，就不需要再定义一个clearfix的class，然后污染outer_box的html了</p>
+
+<figure class='code'><figcaption><span>Compass clearfix</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+</pre></td><td class='code'><pre><code class='sass'><span class='line'><span class="k">@import</span> <span class="s">&quot;compass/utilities/general/clearfix&quot;;</span>
+</span><span class='line'>
+</span><span class='line'><span class="nn">#outer_box</span> <span class="err">{</span>
+</span><span class='line'>    <span class="k">@include</span><span class="nd"> clearfix</span><span class="err">;</span>
+</span><span class='line'>    <span class="na">width</span><span class="o">:</span> <span class="mi">500</span><span class="kt">px</span><span class="err">;</span>
+</span><span class='line'>    <span class="nn">#inner_box</span> <span class="err">{</span>
+</span><span class='line'>        <span class="na">float</span><span class="o">:</span> <span class="no">left</span><span class="err">;</span>
+</span><span class='line'>        <span class="na">width</span><span class="o">:</span> <span class="mi">200</span><span class="kt">px</span><span class="err">;</span>
+</span><span class='line'>        <span class="na">height</span><span class="o">:</span> <span class="mi">100</span><span class="kt">px</span><span class="err">;</span>
+</span><span class='line'>    <span class="err">}</span>
+</span><span class='line'><span class="err">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>另外一个强大的功能是css sprites，原来我们经常用photoshop手动生成这张集合了所有小图标的大图片，修改和维护如同噩梦，现在有了compass，一切轻松了。</p>
+
+<figure class='code'><figcaption><span>compass sprites</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+</pre></td><td class='code'><pre><code class='sass'><span class='line'><span class="c1">//combines all images in icon folder into one</span>
+</span><span class='line'><span class="k">@import</span> <span class="s">&quot;icon/*.png&quot;;</span>
+</span><span class='line'>
+</span><span class='line'><span class="c1">//&quot;movie&quot; is the origin icon&#39;s file name</span>
+</span><span class='line'><span class="nc">.movie_icon</span> <span class="err">{</span>
+</span><span class='line'>    <span class="na">height</span><span class="o">:</span> <span class="mi">20</span><span class="kt">px</span><span class="err">;</span>
+</span><span class='line'>    <span class="k">@include</span><span class="nd"> icon-sprite</span><span class="p">(</span><span class="n">movie</span><span class="p">)</span><span class="err">;</span>
+</span><span class='line'><span class="err">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>整篇介绍到这里就结束了，其实，无论是SASS这样的CSS预处理器，还是Compass这样的框架，要达成的目的都是一致的，那就是遵循<strong>DRY</strong>, <strong>可读性</strong>, 和<strong>正交化</strong>的设计原则，让我们的生活变得更轻松快乐。</p>
+
+<hr />
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[Twitter Bootstrap及其他样式框架]]></title>
@@ -30,7 +787,7 @@
 
 <p>SASS和<a href="http://compass-style.org/">Compass</a>的关系，在很多人来看类似于ruby和rails，compass基于SASS，是一个真正意义上的编程框架，提供了大量的mixin(可理解为函数库)，无论是对css3繁杂的多浏览器写法的简化支持，还是实现各种常见功能的helper，都是强大而丰富的。另外，包括Scott Davis和Eric Meyer的核心团队，也可以说是全明星组合。</p>
 
-<p><a href="http://www.blueprintcss.org/">Blueprint</a>是一套预定义的样式，包括对大部分常用web交互组件的渲染，并且有一个强大的格子布局系统(grid system)，即使不懂设计的程序员，也可以使用blueprint的默认样式做出很漂亮的页面。</p>
+<p><a href="http://www.blueprintcss.org/">Blueprint</a>是一套预定义的样式，包括对大部分常用web交互组件的渲染，并且有一个强大的栅格系统(grid system)，即使不懂设计的程序员，也可以使用blueprint的默认样式做出很漂亮的页面。</p>
 
 <p>Blueprint和Compass，是一个分工很明确的组合，前者负责样式渲染，后者则是基础框架和模块，可以说，在bootstrap诞生之前，是web开发首选的黄金组合。</p>
 
@@ -50,7 +807,7 @@
 
 <ul>
 <li>一套完整的基础css模块，但不如compass丰富和强大</li>
-<li>一套预定义样式表，包括一个格子布局系统，和blueprint提供的差不多，只是设计风格不一样</li>
+<li>一套预定义样式表，也包括一个栅格系统，和blueprint提供的差不多，只是设计风格不一样</li>
 <li>一组基于Jquery的js交互插件，这是Bootstrap真正强大的地方，也是她严格意义上可以取代Blueprint的原因所在，这些非常不错的小插件，包括对话框，下拉导航等等，不但功能完善，而且十分精致，正在成为众多jquery项目的默认设计标准。</li>
 </ul>
 
