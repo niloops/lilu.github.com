@@ -18,7 +18,7 @@ categories:
 
 SASS和[Compass](http://compass-style.org/)的关系，在很多人来看类似于ruby和rails，compass基于SASS，是一个真正意义上的编程框架，提供了大量的mixin(可理解为函数库)，无论是对css3繁杂的多浏览器写法的简化支持，还是实现各种常见功能的helper，都是强大而丰富的。另外，包括Scott Davis和Eric Meyer的核心团队，也可以说是全明星组合。
 
-[Blueprint](http://www.blueprintcss.org/)是一套预定义的样式，包括对大部分常用web交互组件的渲染，并且有一个强大的格子布局系统(grid system)，即使不懂设计的程序员，也可以使用blueprint的默认样式做出很漂亮的页面。
+[Blueprint](http://www.blueprintcss.org/)是一套预定义的样式，包括对大部分常用web交互组件的渲染，并且有一个强大的栅格系统(grid system)，即使不懂设计的程序员，也可以使用blueprint的默认样式做出很漂亮的页面。
 
 Blueprint和Compass，是一个分工很明确的组合，前者负责样式渲染，后者则是基础框架和模块，可以说，在bootstrap诞生之前，是web开发首选的黄金组合。
 
@@ -37,7 +37,7 @@ h5bp是这里提到的所有框架中使用起来最方便的，当然受功能�
 新兴而野心十足的Bootstrap跟上述又都不同，她是基于LESS的一套前端工具库，意图非常明显，想以一个项目，整合Compass，Blueprint，h5bp的目标功能，成为web前端的一站式解决方案。
 
 * 一套完整的基础css模块，但不如compass丰富和强大
-* 一套预定义样式表，包括一个格子布局系统，和blueprint提供的差不多，只是设计风格不一样
+* 一套预定义样式表，也包括一个栅格系统，和blueprint提供的差不多，只是设计风格不一样
 * 一组基于Jquery的js交互插件，这是Bootstrap真正强大的地方，也是她严格意义上可以取代Blueprint的原因所在，这些非常不错的小插件，包括对话框，下拉导航等等，不但功能完善，而且十分精致，正在成为众多jquery项目的默认设计标准。
 
 特别提一下，Bootstrap使用[Normalize.css](http://necolas.github.com/normalize.css/)来进行Reset CSS，这一项目已经成为了事实标准(超过Compass的Eric meyer 2.0)，强烈推荐使用，另外前边说的h5bp也使用Normalize，因此，如果你在项目中同时使用了h5bp和Bootstrap， 请注意，**没有必要再引入h5bp的初始样式表style.css**
