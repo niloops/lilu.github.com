@@ -1,6 +1,6 @@
 ---
 layout: post
-title: "轻量化标记语言Markdown"
+title: "Markdown and Lightweight markup languages"
 date: 2012-07-13 14:20
 comments: true
 categories: 

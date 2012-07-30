@@ -1,11 +1,11 @@
 ---
 layout: post
-title: "SASS和Compass指南"
+title: "Guide to SASS and Compass"
 date: 2012-07-18 11:24
 comments: true
 categories: 
 ---
-
+    
 ## CSS预处理器
 
 CSS预处理器(CSS Preprocessor)，是一种构架于css之上的高级语言，可以通过脚本编译生成CSS代码，其目的是为了让CSS开发者的工作更简单有趣，当前已经进入了较为成熟的阶段，基本上新的web开发项目大都已普遍使用。

@@ -1,6 +1,6 @@
 ---
 layout: post
-title: "Twitter Bootstrap及其他样式框架"
+title: "Twitter Bootstrap,  and CSS framework landscape"
 date: 2012-07-16 12:22
 comments: true
 categories: 
