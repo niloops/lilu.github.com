@@ -54,16 +54,35 @@ JavaScript，做为目前Github上[最为热门的语言](https://github.com/lan
 
 ### 闭包(Closure)
 
+#### 函数(Function)
+
 js中的函数
 
 * 函数是对象
 * 函数有自己的作用域
 
+函数的属性
+
+this  
+    `this` in these context
+    method
+    function
+    constructor
+    apply
+    *this* context in closure
+    var _this = this;
+
+scope chain
+prototype
+
 #### 作用域(Scope)
 
-#### 上下文
+作用域链(scope chain)
 
-#### Hoisting
+    Activation Object
+    how to implement closure with scope chain
+
+Hoisting
 
 在作用域中，无论变量的定义在什么地方，js会在解释的时候把定义提到作用域的最前面，这称为*Hoisting*
 
@@ -87,29 +106,26 @@ function f() {
 ```
 因此，在作用域中不会出错的方法是将变量(包括嵌套函数)的定义语句提升到最前
 
-#### Curry
+Closure application
 
-再举个闭包实际运用的例子，实现函数的curry化功能，即生成一个绑定部分参数的新函数，这在函数式编程中很常见。
+use closures access private attributes
 
-Curry这个名称来自于数学家Haskell Curry(著名的Haskell语言也来自于他)
+this and arguments in closures
+closures as constructors
+
+closure module
+var serial_maker = function() {
+    var seq = 0;
+    return {
+        gensym: function() {return ++seq;} }; };
+
+Immediate Function
+包装模块，使它们不污染全局空间，比如javascript书签
 ``` javascript
-if (!Function.prototype.curry) {
-    Function.prototype.curry = function () {
-        //arguments并不是真正的数组，所以没有concat方法，我们使用了slice将其转换成了数组
-        var slice = Array.prototype.slice,
-            args = slice.apply(arguments),
-            _this = this;
-        return function () {
-            return _this.apply(null, args.concat(slice.apply(arguments)));
-        };
-    };
-}
-
-var add = function (x, y) {return x+y;}
-var add1 = add.curry(1);
-console.log(add1(2)); //=> 3
+(function () {
+    //... code
+}())   
 ```
-
 
 
 ---
@@ -189,9 +205,31 @@ var john = new Person("john");
 
 ### 创建(Object create)
 
+object create
+* literal
+  Object.prototype
+* new 
+  constructor.prototype
+* Object.create()
+  Douglas Crockford's inherit function, for ECMA3
+
 ### 类(Class)
 
+constructor, instance method, class method
+function Complex(r, i) {}
+Complex.prototype.add = function(that) {};
+Complex.ZERO = new Complex(0, 0);
+Complex.parse = function(s) {return new Complex(r, i);}
+Complex.prototype.constructor
+
 ### 继承(Inheritance)
+
+inheritance
+    child.prototype = inherit(parent.prototype);
+method chaining
+    Set.prototype.add.apply(this, arguments);
+prototype inheritance (from good parts)
+functional inheritance (from good parts)
 
 ### 组合(Composite)
 
@@ -218,15 +256,54 @@ if (!Function.prototype.bind) {
 
 ### 混入(Mixin)
 
+Range.prototype.equals = generic.equals;
+
 ### 模块(Module)
 
-Immediate Function
-包装模块，使它们不污染全局空间，比如javascript书签
+使用一个全局对象作为namespace，简单直接
+
 ``` javascript
-(function () {
-    //... code
-}())   
+var MYAPP = {};
+MYAPP.events = {/*...code...*/};
+MYAPP.doms = {/*...code...*/};
+MYAPP.DATA = "CONST DATA";
+
+var myFunc = function () {
+    //使用本地引用，清晰表达使用了什么模块，效率也高
+    var events = MYAPP.events;
+    /* ... */
+};
 ```
+
+modules
+objects as modules
+    sets.SingletonSet = sets.AbstractSet.extend();
+functions as modules
+
+### Curry
+
+再举个闭包实际运用的例子，实现函数的curry化功能，即生成一个绑定部分参数的新函数，这在函数式编程中很常见。
+
+Curry这个名称来自于数学家Haskell Curry(著名的Haskell语言也来自于他)
+``` javascript
+if (!Function.prototype.curry) {
+    Function.prototype.curry = function () {
+        //arguments并不是真正的数组，所以没有concat方法，我们使用了slice将其转换成了数组
+        var slice = Array.prototype.slice,
+            args = slice.apply(arguments),
+            _this = this;
+        return function () {
+            return _this.apply(null, args.concat(slice.apply(arguments)));
+        };
+    };
+}
+
+var add = function (x, y) {return x+y;}
+var add1 = add.curry(1);
+console.log(add1(2)); //=> 3
+```
+
+
 ---
 
 ## 结论
