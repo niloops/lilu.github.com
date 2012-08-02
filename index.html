@@ -9,7 +9,8 @@
   <meta name="author" content="lilu">
 
   
-  <meta name="description" content="CSS预处理器 CSS预处理器(CSS Preprocessor)，是一种构架于css之上的高级语言，可以通过脚本编译生成CSS代码，其目的是为了让CSS开发者的工作更简单有趣，当前已经进入了较为成熟的阶段，基本上新的web开发项目大都已普遍使用。 现在最主要的选择有： SASS 2007年诞生， &hellip;">
+  <meta name="description" content="序 In JavaScript, there is a beautiful, elegant, highly expressive language that is buried under a steaming pile of good intentions and blunders.
+&# &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -97,7 +98,929 @@
       
   <header class="page-header">
     
-      <h1 class="entry-title"><a href="/blog/2012/07/18/sass/">SASS和Compass指南</a></h1>
+      <h1 class="entry-title"><a href="/blog/2012/07/30/javascript/">JavaScript, the Hard Parts</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2012-07-30T11:20:00+08:00" pubdate data-updated="true">2012-07-30 11:20:00</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><h2>序</h2>
+
+<hr />
+
+<blockquote><p> In JavaScript, there is a beautiful, elegant, highly expressive language that is buried under a steaming pile of good intentions and blunders.
+<small>&#8220;JavaScript, The Good Parts&#8221;, by Douglas Crockford</small></p></blockquote>
+
+<p>JavaScript，做为目前Github上<a href="https://github.com/languages">最为热门的语言</a>，在无论是web开发还是mobile开发方面都已经不可或缺，尤其是最近node.js带来的web app风潮，使得js开发的规模和复杂度又上了一个台阶。</p>
+
+<p>但正如Douglas Crockford所说，JavaScript美丽的本质被隐藏在一堆错误和草率的设计之下，在他的经典著作<a href="http://shop.oreilly.com/product/9780596517748.do">JavaScript, The Good Parts</a>中，明确提出了一个简洁，优雅的语言子集，只使用一门语言最好的部分，可以产生更好的代码，也能造就一个更好的程序员。</p>
+
+<p>这里讨论的，就是在js的The Good Parts中，相对更难，也更重要的部分，即如何设计代码的结构和组织，在保证可读性和易维护性的情况下，做到最大限度地DRY。</p>
+
+<p>本文<strong>不涉及</strong>:</p>
+
+<ul>
+<li>变量，表达式，语句等语言基础要素</li>
+<li>性能优化</li>
+<li>宿主环境(Host Environment)，如浏览器</li>
+<li>核心库之外的库和框架</li>
+</ul>
+
+
+<p>本文<strong>只探讨</strong>:</p>
+
+<ul>
+<li>语言中较为费解的部分，如闭包，原型和构造函数</li>
+<li>如何进行代码复用</li>
+<li>常见编程模式</li>
+</ul>
+
+
+<p>在一切开始之前，我建议在每个js项目中，都使用<em>严格模式</em>进行开发</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="s2">&quot;use strict&quot;</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>严格模式是一个ECMA5标准提出的js子集，在未来会逐渐成为js的语言标准，详细介绍在<a href="https://developer.mozilla.org/en/JavaScript/Strict_mode#Changes_in_strict_mode">这里</a></p>
+
+<p>使用严格模式，可以部分地避免一些js设计不好的部分，比如严格模式的如下限制：</p>
+
+<ul>
+<li>所有的变量必须先定义再使用</li>
+<li>在作用域内<code>this</code>没有找到明确值的情况下，<code>this</code>为<code>undefined</code>，而不是全局对象</li>
+</ul>
+
+
+<p>这两条规则可以让js语言最大的设计失误<strong>隐式全局变量(Implied Globals)</strong>的危害降低很多很多</p>
+
+<hr />
+
+<h2>对象(Object)</h2>
+
+<p>javascript中的对象，和传统面向对象语言中的对象有本质的不同</p>
+
+<ul>
+<li>对象是属性的容器，每个属性都拥有名字(key)和值(value)</li>
+<li>对象没有也不需要类(class)</li>
+</ul>
+
+
+<p>对象可以用字面量的方式直接生成，由于js中函数也是对象，可以作为对象的属性，因此js中的对象结合了通常键值對(在别的语言中也称为hash/dictionary)的数据存储能力和一般语言中由类生成的对象的逻辑表达能力，可以说是js最优雅的设计之一</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="kd">var</span> <span class="nx">o</span> <span class="o">=</span> <span class="p">{</span>
+</span><span class='line'>    <span class="nx">foo</span><span class="o">:</span> <span class="s2">&quot;bar&quot;</span><span class="p">,</span>
+</span><span class='line'>    <span class="nx">hello</span><span class="o">:</span> <span class="kd">function</span> <span class="p">()</span> <span class="p">{</span><span class="k">return</span> <span class="s2">&quot;hello, world&quot;</span><span class="p">;}</span>
+</span><span class='line'><span class="p">};</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<hr />
+
+<h2>闭包(Closure)</h2>
+
+<p>要了解闭包的概念，首先来检视一下js中的函数(function)到底是什么</p>
+
+<ul>
+<li>函数是对象，可以有自己的属性和方法</li>
+<li>函数有自己的作用域</li>
+</ul>
+
+
+<h3>函数作用域</h3>
+
+<p>js中没有块级作用域(block scope)，取而代之的是函数作用域(function scope)，即只有函数可以构建出一个上下文环境，变量在声明他们的函数体及之内嵌套的任意函数体内都是有定义的</p>
+
+<p>在作用域中，无论变量的定义在什么地方，js会在解释的时候把定义提到作用域的最前面，这称为<em>Hoisting</em></p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="kd">var</span> <span class="nx">foo</span> <span class="o">=</span> <span class="s2">&quot;global&quot;</span><span class="p">;</span>
+</span><span class='line'><span class="kd">function</span> <span class="nx">f</span><span class="p">()</span> <span class="p">{</span>
+</span><span class='line'>    <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">foo</span><span class="p">);</span> <span class="c1">// =&gt; undefined</span>
+</span><span class='line'>    <span class="kd">var</span> <span class="nx">foo</span> <span class="o">=</span> <span class="s2">&quot;local&quot;</span><span class="p">;</span>
+</span><span class='line'>    <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">foo</span><span class="p">);</span> <span class="c1">// =&gt; &quot;local&quot;</span>
+</span><span class='line'><span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>上述代码等效</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="kd">var</span> <span class="nx">foo</span> <span class="o">=</span> <span class="s2">&quot;global&quot;</span><span class="p">;</span>
+</span><span class='line'><span class="kd">function</span> <span class="nx">f</span><span class="p">()</span> <span class="p">{</span>
+</span><span class='line'>    <span class="kd">var</span> <span class="nx">foo</span><span class="p">;</span>
+</span><span class='line'>    <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">foo</span><span class="p">);</span> <span class="c1">// =&gt; undefined</span>
+</span><span class='line'>    <span class="nx">foo</span> <span class="o">=</span> <span class="s2">&quot;local&quot;</span><span class="p">;</span>
+</span><span class='line'>    <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">foo</span><span class="p">);</span> <span class="c1">// =&gt; &quot;local&quot;</span>
+</span><span class='line'><span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>因此，在作用域中不会出错的方法是将变量(包括嵌套函数)的定义语句提升到最前</p>
+
+<h3>作用域对象</h3>
+
+<p>在函数作用域中，某个用<code>var</code>声明的变量实际上是一个与此函数相关的对象的属性，这个对象在ECMA3标准中称为<em>call object</em>，在ECMA5中称为<em>declarative environment record</em>，通常也有一种叫法是<em>Activation Object</em>，这个对象是一种内部实现，没有方法可以引用</p>
+
+<p>如果没有用<code>var</code>而直接使用了某变量，则此变量视为是全局作用域相关对象(global object)的属性，这也是为什么严格模式要做变量必须定义的限制的原因所在</p>
+
+<p>一种可行的利用函数作用域的方法被称为<em>Immediate Function</em>，被普遍使用在包装模块上，使内部变量不污染全局空间，典型的情景比如javascript书签</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="p">(</span><span class="kd">function</span> <span class="p">()</span> <span class="p">{</span>
+</span><span class='line'>    <span class="c1">//... code</span>
+</span><span class='line'><span class="p">}())</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>当函数内部又嵌套定义了其他函数时，他们的作用域对象会形成一个<strong>作用域链</strong>，这一组对象定义了代码作用域中的变量，当内部函数使用某个变量时，她会根据作用域链向上查找</p>
+
+<p>当定义一个函数时，这个作用域链得以保存下来，当此函数被调用时，<em>Activation Object</em>被创建，保存局部变量和参数，并被添加至此作用域链上</p>
+
+<h3>闭包的实现</h3>
+
+<p>作用域链和其上保存的变量，让函数对象形成了<strong>闭包</strong>，她可以捕捉到局部变量和参数，并一直保存下来，并可以作为值进行传递</p>
+
+<p>只有一个<em>Activation Object</em>失去所有引用的时候，即她不被包含在任何作用域链内的时候，才会被垃圾回收，这时候这个闭包就永久消失了</p>
+
+<p>一个典型的闭包形成的计数器</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="kd">var</span> <span class="nx">serial_maker</span> <span class="o">=</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+</span><span class='line'>    <span class="kd">var</span> <span class="nx">seq</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+</span><span class='line'>    <span class="k">return</span> <span class="p">{</span>
+</span><span class='line'>        <span class="nx">gensym</span><span class="o">:</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span><span class="k">return</span> <span class="o">++</span><span class="nx">seq</span><span class="p">;}</span>
+</span><span class='line'>    <span class="p">};</span>
+</span><span class='line'><span class="p">};</span>
+</span><span class='line'>
+</span><span class='line'><span class="kd">var</span> <span class="nx">s</span> <span class="o">=</span> <span class="nx">serial_maker</span><span class="p">();</span>
+</span><span class='line'><span class="nx">s</span><span class="p">.</span><span class="nx">gensym</span><span class="p">();</span> <span class="c1">//=&gt; 1</span>
+</span><span class='line'><span class="nx">s</span><span class="p">.</span><span class="nx">gensym</span><span class="p">();</span> <span class="c1">//=&gt; 2</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p></p>
+
+<h3>函数的隐藏属性</h3>
+
+<p>函数对象有<code>call</code>，<code>apply</code>，<code>length</code>之类的属性和方法，<em>Activation Object</em>也有默认的属性，最常见的是函数的参数列表<code>arguments</code>，而较令人费解的，是<code>this</code></p>
+
+<p><code>this</code>在不同的函数调用中，指向不同的对象</p>
+
+<ul>
+<li>函数作为方法调用时，<code>this</code>指向方法所属的对象</li>
+<li>函数单独被调用时(没有所属对象)，<code>this</code>指向全局对象，在严格模式中，<code>this</code>是<code>undefined</code></li>
+<li>函数作为构造函数被调用时<code>new f()</code>，<code>this</code>是构造函数新生成并默认返回的对象</li>
+<li>函数使用<code>call</code>或<code>apply</code>方式被调用时，<code>this</code>由传入的参数决定</li>
+</ul>
+
+
+<p>对于闭包来说，无论是<code>this</code>，还是<code>arguments</code>，都是在调用时来决定的，这些隐藏属性闭包无法保存，所以很常见的一种方法是把<code>this</code>保存在局部变量中</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="kd">var</span> <span class="nx">o</span> <span class="o">=</span> <span class="p">{</span>
+</span><span class='line'>    <span class="nx">m</span><span class="o">:</span> <span class="kd">function</span> <span class="p">()</span> <span class="p">{</span>
+</span><span class='line'>        <span class="kd">var</span> <span class="nx">self</span> <span class="o">=</span> <span class="k">this</span><span class="p">;</span>
+</span><span class='line'>        <span class="kd">var</span> <span class="nx">f</span> <span class="o">=</span> <span class="kd">function</span> <span class="p">()</span> <span class="p">{</span>
+</span><span class='line'>            <span class="k">this</span> <span class="o">===</span> <span class="nx">o</span><span class="p">;</span> <span class="c1">//=&gt; false</span>
+</span><span class='line'>            <span class="nx">self</span> <span class="o">===</span> <span class="nx">o</span><span class="p">;</span> <span class="c1">//=&gt; true</span>
+</span><span class='line'>        <span class="p">};</span>
+</span><span class='line'>        <span class="nx">f</span><span class="p">();</span>
+</span><span class='line'>    <span class="p">}</span>
+</span><span class='line'><span class="p">};</span>
+</span><span class='line'>
+</span><span class='line'><span class="nx">o</span><span class="p">.</span><span class="nx">m</span><span class="p">();</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<hr />
+
+<h2>原型(Prototype)</h2>
+
+<p>js是一门面向对象的语言，但与继承于smalltalk的基于类的面向对象语言不同，js的面向对象使用来自self语言的<em>原型继承</em>的方法实现，在js中，只有对象(object)，而没有对象的模板(class)</p>
+
+<p>题外话，smalltalk和self语言都产生于Xerox PARC(施乐的帕洛阿托研究中心)，这里也是点阵图，图形界面，激光打印和以太网的故乡，致敬一下:)</p>
+
+<h3>原型的实现</h3>
+
+<p>几乎每一个js对象都和另一个对象相关联，这另一个对象就是我们说的原型，每一个对象都从原型继承属性</p>
+
+<p>所有字面量对象(literal object)都具有同一个原型，她是<code>Object.prototype</code>，通过构造器生成的对象原型则是构造器的<code>prototype</code>属性的值</p>
+
+<p>对象的原型对象也有可能有自己的原型，形成了一条原型链(prototype chain)，直到<code>Object.prototype</code>为止，她没有原型</p>
+
+<p>查询对象的属性时，从此对象本身向原型链上依次向上查询，这也称为<em>委托(Delegation)</em></p>
+
+<h3>原型的操作</h3>
+
+<p>指定原型生成对象的方法有两种：</p>
+
+<ol>
+<li>使用构造器生成</li>
+<li>在ECMA5中，使用<code>Object.create()</code>方法</li>
+</ol>
+
+
+<p>其他的指定原型方法我们将在后面讲述</p>
+
+<p>获取一个对象原型则并不容易，方法也有两种:</p>
+
+<ol>
+<li>查询<code>o.constructor.prototype</code>来检测，不过往往原型上的construct属性会丢失掉</li>
+<li>在ECMA5中，使用<code>Object.getPrototypeOf()</code>方法</li>
+</ol>
+
+
+<hr />
+
+<h2>构造函数(Constructor)</h2>
+
+<p>不得不说，使用<code>new</code>来初始化对象，这在基于原型继承的js语言中，带来了严重的违和感，根据作者本人的解释，当时的这个设计应该是为了贴近正流行的java语言，让更多人更容易上手，结果造成了js中一个不良和晦涩的设计，不过，在js中，这也是指定原型的必要方法。</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="kd">var</span> <span class="nx">Person</span> <span class="o">=</span> <span class="kd">function</span> <span class="p">(</span><span class="nx">name</span><span class="p">)</span> <span class="p">{</span><span class="k">this</span><span class="p">.</span><span class="nx">name</span> <span class="o">=</span> <span class="nx">name</span><span class="p">;};</span>
+</span><span class='line'><span class="nx">Person</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">getName</span> <span class="o">=</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span><span class="k">return</span> <span class="k">this</span><span class="p">.</span><span class="nx">name</span><span class="p">;};</span>
+</span><span class='line'><span class="kd">var</span> <span class="nx">john</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Person</span><span class="p">(</span><span class="s2">&quot;john&quot;</span><span class="p">);</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>使用<code>new</code>调用一个函数时:</p>
+
+<ol>
+<li>一个空对象被创建</li>
+<li>将此空对象的原型指向<code>Person.prototype</code></li>
+<li>将此空对象赋值给<code>this</code></li>
+<li>为<code>this.name</code>赋值</li>
+<li>如果没有明确<code>return</code>其他对象，则返回<code>this</code></li>
+</ol>
+
+
+<p>为了让构造函数得以实现，<strong>每一个</strong>js中的函数对象都不得不：</p>
+
+<ul>
+<li>拥有一个<code>prototype</code>属性，指向一个对象</li>
+<li>这个对象有唯一一个属性<code>constructor</code>, 指向此对象所属的函数对象</li>
+</ul>
+
+
+<p>这是复杂，冗余，而不容易理解的，有可能出现这些问题:</p>
+
+<ol>
+<li>如果忘记了<code>new</code>去调用构造函数，会造成不可预期的行为，尤其是在非严格模式下，这时的<code>this</code>是全局对象</li>
+<li>很多情况下<code>prototype</code>可能会在重构中被完全覆盖，此时<code>constructor</code>属性也会丢失掉</li>
+</ol>
+
+
+<p>在后面我们会探讨创建对象更好的模式</p>
+
+<hr />
+
+<h2>类(Class)</h2>
+
+<p>在js中，代码复用的方法有传统的(基于类的)，也有现代的(基于原型的)，我们先看一下在js中，如何模拟传统面向语言中类的行为</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="c1">// constructor</span>
+</span><span class='line'><span class="kd">var</span> <span class="nx">Gadget</span> <span class="o">=</span> <span class="kd">function</span> <span class="p">(</span><span class="nx">name</span><span class="p">)</span> <span class="p">{</span><span class="k">this</span><span class="p">.</span><span class="nx">name</span> <span class="o">=</span> <span class="nx">name</span><span class="p">;};</span>
+</span><span class='line'>
+</span><span class='line'><span class="c1">//instance method</span>
+</span><span class='line'><span class="nx">Gadget</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">setPrice</span> <span class="o">=</span> <span class="kd">function</span> <span class="p">(</span><span class="nx">price</span><span class="p">)</span> <span class="p">{</span><span class="k">this</span><span class="p">.</span><span class="nx">price</span> <span class="o">=</span> <span class="nx">price</span><span class="p">;};</span>
+</span><span class='line'>
+</span><span class='line'><span class="c1">//static method</span>
+</span><span class='line'><span class="nx">Gadget</span><span class="p">.</span><span class="nx">isShiny</span> <span class="o">=</span> <span class="kd">function</span> <span class="p">()</span> <span class="p">{</span><span class="k">return</span> <span class="s2">&quot;you bet&quot;</span><span class="p">;};</span>
+</span><span class='line'>
+</span><span class='line'><span class="c1">//static property</span>
+</span><span class='line'><span class="nx">Gadget</span><span class="p">.</span><span class="nx">IPHONE</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Gadget</span><span class="p">(</span><span class="s1">&#39;iphone&#39;</span><span class="p">);</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Douglas Crockford也提到过另一种方法来构建类，不过他本人并不提倡这种做法</p>
+
+<p>首先Monkey patching(之后会再提到这个概念)一下函数对象，新增加<code>method()</code>方法</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="nb">Function</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">method</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>    <span class="nb">Function</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">method</span> <span class="o">=</span> <span class="kd">function</span> <span class="p">(</span><span class="nx">name</span><span class="p">,</span> <span class="nx">implementation</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>        <span class="k">this</span><span class="p">.</span><span class="nx">prototype</span><span class="p">[</span><span class="nx">name</span><span class="p">]</span> <span class="o">=</span> <span class="nx">implementation</span><span class="p">;</span>
+</span><span class='line'>        <span class="k">return</span> <span class="k">this</span><span class="p">;</span>
+</span><span class='line'>    <span class="p">};</span>
+</span><span class='line'><span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>构造类</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="kd">var</span> <span class="nx">Gadget</span> <span class="o">=</span> <span class="kd">function</span> <span class="p">(</span><span class="nx">name</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>    <span class="k">this</span><span class="p">.</span><span class="nx">name</span> <span class="o">=</span> <span class="nx">name</span><span class="p">;</span>
+</span><span class='line'><span class="p">}.</span>
+</span><span class='line'><span class="nx">method</span><span class="p">(</span><span class="s1">&#39;getName&#39;</span><span class="p">,</span> <span class="kd">function</span> <span class="p">()</span> <span class="p">{</span>
+</span><span class='line'>    <span class="k">return</span> <span class="k">this</span><span class="p">.</span><span class="nx">name</span><span class="p">;</span>
+</span><span class='line'><span class="p">}).</span>
+</span><span class='line'><span class="nx">method</span><span class="p">(</span><span class="s1">&#39;setName&#39;</span><span class="p">,</span> <span class="kd">function</span> <span class="p">(</span><span class="nx">name</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>    <span class="k">this</span><span class="p">.</span><span class="nx">name</span> <span class="o">=</span> <span class="nx">name</span><span class="p">;</span>
+</span><span class='line'>    <span class="k">return</span> <span class="k">this</span><span class="p">;</span>
+</span><span class='line'><span class="p">});</span>
+</span><span class='line'>
+</span><span class='line'><span class="kd">var</span> <span class="nx">i</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Gadget</span><span class="p">(</span><span class="s1">&#39;iphone&#39;</span><span class="p">);</span>
+</span><span class='line'><span class="nx">i</span><span class="p">.</span><span class="nx">getName</span><span class="p">();</span> <span class="c1">// =&gt;&#39;iphone&#39;</span>
+</span><span class='line'><span class="nx">i</span><span class="p">.</span><span class="nx">setName</span><span class="p">(</span><span class="s1">&#39;ipad&#39;</span><span class="p">).</span><span class="nx">getName</span><span class="p">();</span> <span class="c1">// =&gt;&#39;ipad&#39;</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>这里使用了链式方法(Chaining methods)，这在jQuery和DOM库中相当常见</p>
+
+<hr />
+
+<h2>封装(Encapsulation)</h2>
+
+<p>在javascript中的对象体系中，并没有私有变量这一概念，对象中的所有信息都是公开的和可修改的，至少在ECMA3中是如此，在ECMA5中，对象的每个属性是可以配置成不可修改或不可枚举的，不过，因为现在主要使用闭包作为封装内部数据的方法，所以ECMA5中的这些新的权限相关特性还没有得到广泛的应用。</p>
+
+<p>使用对象字面量时的封装，利用了闭包的概念，并使用了上边提到的immediate function</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="kd">var</span> <span class="nx">iphone</span> <span class="o">=</span> <span class="p">(</span><span class="kd">function</span> <span class="p">()</span> <span class="p">{</span>
+</span><span class='line'>    <span class="kd">var</span> <span class="nx">name</span> <span class="o">=</span> <span class="s1">&#39;iphone&#39;</span><span class="p">;</span>
+</span><span class='line'>    <span class="k">return</span> <span class="p">{</span>
+</span><span class='line'>        <span class="nx">getName</span><span class="o">:</span> <span class="kd">function</span> <span class="p">()</span> <span class="p">{</span><span class="k">return</span> <span class="nx">name</span><span class="p">;}</span>
+</span><span class='line'>    <span class="p">};</span>
+</span><span class='line'><span class="p">}());</span>
+</span><span class='line'><span class="nx">iphone</span><span class="p">.</span><span class="nx">getName</span><span class="p">();</span> <span class="c1">//=&gt; iphone</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>使用构造函数时的封装，相对完整的例子</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+<span class='line-number'>28</span>
+<span class='line-number'>29</span>
+</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="kd">var</span> <span class="nx">Gadget</span> <span class="o">=</span> <span class="p">(</span><span class="kd">function</span> <span class="p">()</span> <span class="p">{</span>
+</span><span class='line'>    <span class="c1">//private static member</span>
+</span><span class='line'>    <span class="kd">var</span> <span class="nx">_counter</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="c1">//private instance member</span>
+</span><span class='line'>    <span class="kd">var</span> <span class="nx">_name</span><span class="p">;</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="c1">//constructor</span>
+</span><span class='line'>    <span class="kd">var</span> <span class="nx">Con</span> <span class="o">=</span> <span class="kd">function</span> <span class="p">(</span><span class="nx">name</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>        <span class="nx">_name</span> <span class="o">=</span> <span class="nx">name</span><span class="p">;</span>
+</span><span class='line'>        <span class="nx">_counter</span><span class="o">++</span><span class="p">;</span>
+</span><span class='line'>    <span class="p">};</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="c1">// public API </span>
+</span><span class='line'>    <span class="nx">Con</span><span class="p">.</span><span class="nx">prototype</span> <span class="o">=</span> <span class="p">{</span>
+</span><span class='line'>        <span class="nx">constructor</span><span class="o">:</span> <span class="nx">Con</span><span class="p">,</span>
+</span><span class='line'>        <span class="nx">getName</span><span class="o">:</span> <span class="kd">function</span> <span class="p">()</span> <span class="p">{</span><span class="k">return</span> <span class="nx">_name</span><span class="p">;},</span>
+</span><span class='line'>        <span class="nx">getLastId</span><span class="o">:</span> <span class="kd">function</span> <span class="p">()</span> <span class="p">{</span><span class="k">return</span> <span class="nx">_counter</span><span class="p">;}</span>
+</span><span class='line'>    <span class="p">};</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="k">return</span> <span class="nx">Con</span><span class="p">;</span>
+</span><span class='line'><span class="p">}());</span>
+</span><span class='line'>
+</span><span class='line'><span class="kd">var</span> <span class="nx">iphone</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Gadget</span><span class="p">(</span><span class="s1">&#39;iphone&#39;</span><span class="p">);</span>
+</span><span class='line'><span class="nx">iphone</span><span class="p">.</span><span class="nx">getName</span><span class="p">();</span> <span class="c1">//=&gt; iphone</span>
+</span><span class='line'><span class="nx">iphone</span><span class="p">.</span><span class="nx">getLastId</span><span class="p">();</span> <span class="c1">//=&gt; 1</span>
+</span><span class='line'><span class="kd">var</span> <span class="nx">ipad</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Gadget</span><span class="p">(</span><span class="s1">&#39;ipad&#39;</span><span class="p">);</span>
+</span><span class='line'><span class="nx">iphone</span><span class="p">.</span><span class="nx">getName</span><span class="p">();</span> <span class="c1">//=&gt; ipad</span>
+</span><span class='line'><span class="nx">iphone</span><span class="p">.</span><span class="nx">getLastId</span><span class="p">();</span> <span class="c1">//=&gt; 2</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>需要注意的是，如果封装的内部变量是对象的话，外部代码还是可以对其进行修改的，因为javascript的对象传递的都是引用，为了避免这种情况，可以返回内部私有对象的部分属性或是拷贝</p>
+
+<hr />
+
+<h2>类继承(Class Inheritance)</h2>
+
+<p>先定义一下父类和子类的构造函数</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="kd">var</span> <span class="nx">Parent</span> <span class="o">=</span> <span class="kd">function</span> <span class="p">()</span> <span class="p">{</span><span class="cm">/*...*/</span><span class="p">)};</span>
+</span><span class='line'><span class="kd">var</span> <span class="nx">Child</span> <span class="o">=</span> <span class="kd">function</span> <span class="p">()</span> <span class="p">{</span><span class="cm">/*...*/</span><span class="p">)};</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>简单直接的想法</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="nx">Child</span><span class="p">.</span><span class="nx">prototype</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Parent</span><span class="p">();</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>这种方式的缺点是Parent的实例成员也被继承了，我们希望只继承prototype中的公用部分</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="nx">Child</span><span class="p">.</span><span class="nx">prototype</span> <span class="o">=</span> <span class="nx">Parent</span><span class="p">.</span><span class="nx">prototype</span><span class="p">;</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>这种共享原型的缺点是<code>Child</code>的原型被更改时全部父对象都被影响</p>
+
+<p>可以引入一个代理构造器来回避这个缺点</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="kd">var</span> <span class="nx">F</span> <span class="o">=</span> <span class="kd">function</span> <span class="p">()</span> <span class="p">{};</span>
+</span><span class='line'><span class="nx">F</span><span class="p">.</span><span class="nx">prototype</span> <span class="o">=</span> <span class="nx">Parent</span><span class="p">.</span><span class="nx">prototype</span><span class="p">;</span>
+</span><span class='line'><span class="nx">Child</span><span class="p">.</span><span class="nx">prototype</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">F</span><span class="p">();</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>用一个完整的例子说明一下，我们用<code>klass</code>模拟实现通常面向对象语言中的类</p>
+
+<p>使用起来是这样的</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="kd">var</span> <span class="nx">Gadget</span> <span class="o">=</span> <span class="nx">klass</span><span class="p">(</span><span class="kc">null</span><span class="p">,</span> <span class="p">{</span>
+</span><span class='line'>    <span class="nx">initialize</span><span class="o">:</span> <span class="kd">function</span> <span class="p">(</span><span class="nx">name</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>        <span class="k">this</span><span class="p">.</span><span class="nx">name</span> <span class="o">=</span> <span class="nx">name</span><span class="p">;</span>
+</span><span class='line'>    <span class="p">},</span>
+</span><span class='line'>    <span class="nx">getName</span><span class="o">:</span> <span class="kd">function</span> <span class="p">()</span> <span class="p">{</span>
+</span><span class='line'>        <span class="k">return</span> <span class="k">this</span><span class="p">.</span><span class="nx">name</span><span class="p">;</span>
+</span><span class='line'>    <span class="p">}</span>
+</span><span class='line'><span class="p">});</span>
+</span><span class='line'>
+</span><span class='line'><span class="p">(</span><span class="k">new</span> <span class="nx">Gadget</span><span class="p">(</span><span class="s1">&#39;iphone&#39;</span><span class="p">)).</span><span class="nx">getName</span><span class="p">();</span> <span class="c1">//=&gt; iphone</span>
+</span><span class='line'>
+</span><span class='line'><span class="kd">var</span> <span class="nx">Phone</span> <span class="o">=</span> <span class="nx">klass</span><span class="p">(</span><span class="nx">Gadget</span><span class="p">,</span> <span class="p">{</span>
+</span><span class='line'>    <span class="nx">initialize</span><span class="o">:</span> <span class="kd">function</span> <span class="p">(</span><span class="nx">name</span><span class="p">)</span> <span class="p">{},</span>
+</span><span class='line'>    <span class="nx">getName</span><span class="o">:</span> <span class="kd">function</span> <span class="p">()</span> <span class="p">{</span>
+</span><span class='line'>        <span class="kd">var</span> <span class="nx">name</span> <span class="o">=</span> <span class="nx">Phone</span><span class="p">.</span><span class="kr">super</span><span class="p">.</span><span class="nx">getName</span><span class="p">.</span><span class="nx">call</span><span class="p">(</span><span class="k">this</span><span class="p">);</span>
+</span><span class='line'>        <span class="k">return</span> <span class="s2">&quot;Phone: &quot;</span> <span class="o">+</span> <span class="nx">name</span><span class="p">;</span>
+</span><span class='line'>    <span class="p">}</span>
+</span><span class='line'><span class="p">});</span>
+</span><span class='line'>
+</span><span class='line'><span class="p">(</span><span class="k">new</span> <span class="nx">Phone</span><span class="p">(</span><span class="s1">&#39;iphone&#39;</span><span class="p">)).</span><span class="nx">getName</span><span class="p">();</span> <span class="c1">//=&gt; Phone: iphone</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p><code>klass</code>的实现</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="kd">var</span> <span class="nx">klass</span> <span class="o">=</span> <span class="kd">function</span> <span class="p">(</span><span class="nx">Parent</span><span class="p">,</span> <span class="nx">props</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>    <span class="kd">var</span> <span class="nx">Child</span><span class="p">,</span> <span class="nx">F</span><span class="p">,</span> <span class="nx">i</span><span class="p">;</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="nx">Child</span> <span class="o">=</span> <span class="kd">function</span> <span class="p">()</span> <span class="p">{</span>
+</span><span class='line'>        <span class="c1">//这里自动调用父类的构造方法</span>
+</span><span class='line'>        <span class="k">if</span> <span class="p">(</span><span class="nx">Child</span><span class="p">.</span><span class="kr">super</span> <span class="o">&amp;&amp;</span> <span class="nx">Child</span><span class="p">.</span><span class="kr">super</span><span class="p">.</span><span class="nx">hasOwnProperty</span><span class="p">(</span><span class="s2">&quot;initialize&quot;</span><span class="p">))</span>
+</span><span class='line'>            <span class="nx">Child</span><span class="p">.</span><span class="kr">super</span><span class="p">.</span><span class="nx">initialize</span><span class="p">.</span><span class="nx">apply</span><span class="p">(</span><span class="k">this</span><span class="p">,</span> <span class="nx">arguments</span><span class="p">);</span>
+</span><span class='line'>        <span class="k">if</span> <span class="p">(</span><span class="nx">Child</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">hasOwnProperty</span><span class="p">(</span><span class="s2">&quot;initialize&quot;</span><span class="p">))</span>
+</span><span class='line'>            <span class="nx">Child</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">initialize</span><span class="p">.</span><span class="nx">apply</span><span class="p">(</span><span class="k">this</span><span class="p">,</span> <span class="nx">arguments</span><span class="p">);</span>
+</span><span class='line'>    <span class="p">};</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="nx">Parent</span> <span class="o">=</span> <span class="nx">Parent</span> <span class="o">||</span> <span class="nb">Object</span><span class="p">;</span>
+</span><span class='line'>    <span class="nx">F</span> <span class="o">=</span> <span class="kd">function</span> <span class="p">()</span> <span class="p">{};</span>
+</span><span class='line'>    <span class="nx">F</span><span class="p">.</span><span class="nx">prototype</span> <span class="o">=</span> <span class="nx">Parent</span><span class="p">.</span><span class="nx">prototype</span><span class="p">;</span>
+</span><span class='line'>    <span class="nx">Child</span><span class="p">.</span><span class="nx">prototype</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">F</span><span class="p">();</span>
+</span><span class='line'>    <span class="nx">Child</span><span class="p">.</span><span class="kr">super</span> <span class="o">=</span> <span class="nx">Parent</span><span class="p">.</span><span class="nx">prototype</span><span class="p">;</span>
+</span><span class='line'>    <span class="nx">Child</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">constructor</span> <span class="o">=</span> <span class="nx">Child</span><span class="p">;</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="c1">//获取所有定义的属性和方法</span>
+</span><span class='line'>    <span class="k">for</span> <span class="p">(</span><span class="nx">i</span> <span class="k">in</span> <span class="nx">props</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>        <span class="k">if</span> <span class="p">(</span><span class="nx">props</span><span class="p">.</span><span class="nx">hasOwnProperty</span><span class="p">(</span><span class="nx">i</span><span class="p">))</span>
+</span><span class='line'>            <span class="nx">Child</span><span class="p">.</span><span class="nx">prototype</span><span class="p">[</span><span class="nx">i</span><span class="p">]</span> <span class="o">=</span> <span class="nx">props</span><span class="p">[</span><span class="nx">i</span><span class="p">];</span>
+</span><span class='line'>    <span class="p">};</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="k">return</span> <span class="nx">Child</span><span class="p">;</span>
+</span><span class='line'><span class="p">};</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>这种基于类思想的代码复用在很多库中都实现了，用起来可以让程序员完全忘记原型的存在，不过我更倾向于使用其他方法进行代码复用，这样更高效和简单，也更贴近js语言的本质</p>
+
+<hr />
+
+<h2>原型继承(Prototype Inheritance)</h2>
+
+<p>这里不牵涉到类的概念，只是一个对象复用另外一个对象</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="nb">Object</span><span class="p">.</span><span class="nx">create</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>    <span class="nb">Object</span><span class="p">.</span><span class="nx">create</span> <span class="o">=</span> <span class="kd">function</span> <span class="p">(</span><span class="nx">o</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>        <span class="kd">var</span> <span class="nx">F</span> <span class="o">=</span> <span class="kd">function</span> <span class="p">()</span> <span class="p">{};</span>
+</span><span class='line'>        <span class="nx">F</span><span class="p">.</span><span class="nx">prototype</span> <span class="o">=</span> <span class="nx">o</span><span class="p">;</span>
+</span><span class='line'>        <span class="k">return</span> <span class="k">new</span> <span class="nx">F</span><span class="p">();</span>
+</span><span class='line'>    <span class="p">};</span>
+</span><span class='line'><span class="p">}</span>
+</span><span class='line'>
+</span><span class='line'><span class="kd">var</span> <span class="nx">parent</span> <span class="o">=</span> <span class="p">{</span><span class="nx">name</span><span class="o">:</span> <span class="s1">&#39;parent&#39;</span><span class="p">};</span>
+</span><span class='line'><span class="kd">var</span> <span class="nx">child</span> <span class="o">=</span> <span class="nb">Object</span><span class="p">.</span><span class="nx">create</span><span class="p">(</span><span class="nx">parent</span><span class="p">);</span>
+</span><span class='line'><span class="nx">child</span><span class="p">.</span><span class="nx">name</span><span class="p">;</span> <span class="c1">//=&gt; parent</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>这也是ECMA5中<code>Object.create</code>方法的简化实现</p>
+
+<hr />
+
+<h2>绑定(Bind)</h2>
+
+<p>除了完整地复用其他对象外，也可以只使用对象的指定方法，把一个对象的方法借给另一个对象使用，这种行为称为绑定</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="nb">Function</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">bind</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>    <span class="nb">Function</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">bind</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">o</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>        <span class="kd">var</span> <span class="nx">self</span> <span class="o">=</span> <span class="k">this</span><span class="p">,</span> <span class="nx">_bound_args</span> <span class="o">=</span> <span class="nx">arguments</span><span class="p">;</span>
+</span><span class='line'>        <span class="k">return</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+</span><span class='line'>            <span class="kd">var</span> <span class="nx">args</span> <span class="o">=</span> <span class="p">[],</span> <span class="nx">i</span><span class="p">;</span>
+</span><span class='line'>            <span class="k">for</span><span class="p">(</span><span class="nx">i</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span> <span class="nx">i</span> <span class="o">&lt;</span> <span class="nx">_bound_args</span><span class="p">.</span><span class="nx">length</span><span class="p">;</span> <span class="nx">i</span><span class="o">++</span><span class="p">)</span> <span class="nx">args</span><span class="p">.</span><span class="nx">push</span><span class="p">(</span><span class="nx">_bound_args</span><span class="p">[</span><span class="nx">i</span><span class="p">]);</span>
+</span><span class='line'>            <span class="k">for</span><span class="p">(</span><span class="nx">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="nx">i</span> <span class="o">&lt;</span> <span class="nx">arguments</span><span class="p">.</span><span class="nx">length</span><span class="p">;</span> <span class="nx">i</span><span class="o">++</span><span class="p">)</span> <span class="nx">args</span><span class="p">.</span><span class="nx">push</span><span class="p">(</span><span class="nx">arguments</span><span class="p">[</span><span class="nx">i</span><span class="p">]);</span>
+</span><span class='line'>            <span class="k">return</span> <span class="nx">self</span><span class="p">.</span><span class="nx">apply</span><span class="p">(</span><span class="nx">o</span><span class="p">,</span> <span class="nx">args</span><span class="p">);</span>
+</span><span class='line'>        <span class="p">};</span>
+</span><span class='line'>    <span class="p">};</span>
+</span><span class='line'><span class="p">}</span>
+</span><span class='line'>
+</span><span class='line'><span class="kd">var</span> <span class="nx">one</span> <span class="o">=</span> <span class="p">{</span>
+</span><span class='line'>    <span class="nx">name</span><span class="o">:</span> <span class="s1">&#39;one&#39;</span><span class="p">,</span>
+</span><span class='line'>    <span class="nx">say</span><span class="o">:</span> <span class="kd">function</span> <span class="p">(</span><span class="nx">greet</span><span class="p">)</span> <span class="p">{</span> <span class="k">return</span> <span class="nx">greet</span> <span class="o">+</span> <span class="s2">&quot;, &quot;</span> <span class="o">+</span> <span class="k">this</span><span class="p">.</span><span class="nx">name</span><span class="p">;</span> <span class="p">}</span>
+</span><span class='line'><span class="p">};</span>
+</span><span class='line'>
+</span><span class='line'><span class="kd">var</span> <span class="nx">two</span> <span class="o">=</span> <span class="p">{</span>
+</span><span class='line'>    <span class="nx">name</span><span class="o">:</span> <span class="s1">&#39;two&#39;</span>
+</span><span class='line'><span class="p">};</span>
+</span><span class='line'>
+</span><span class='line'><span class="p">(</span><span class="nx">one</span><span class="p">.</span><span class="nx">say</span><span class="p">.</span><span class="nx">bind</span><span class="p">(</span><span class="nx">two</span><span class="p">))(</span><span class="s1">&#39;hello&#39;</span><span class="p">);</span> <span class="c1">//=&gt; hello, two</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>这是ECMA5中<code>bind</code>方法的简化实现，在客户端大量的事件回调中<code>bind</code>的应用相当普遍</p>
+
+<p>顺带一提，包括上边的<code>method</code>方法和<code>bind</code>方法，js中所有的对象，都是开放的，可以在运行时动态地修改和添加新的行为，这种特性一般称为<em>monkey patching</em></p>
+
+<hr />
+
+<h2>混入(Mixin)</h2>
+
+<p>Mixin是很多语言都有的概念，有时候是以多重继承的面貌展现的</p>
+
+<p>在JavaScript中虽然没有内置Mixin功能，但实现很容易</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="kd">var</span> <span class="nx">extend</span> <span class="o">=</span> <span class="kd">function</span> <span class="p">(</span><span class="nx">parent</span><span class="p">,</span> <span class="nx">child</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>    <span class="kd">var</span> <span class="nx">i</span><span class="p">;</span>
+</span><span class='line'>    <span class="nx">child</span> <span class="o">=</span> <span class="nx">child</span> <span class="o">||</span> <span class="p">{};</span>
+</span><span class='line'>    <span class="k">for</span> <span class="p">(</span><span class="nx">i</span> <span class="k">in</span> <span class="nx">parent</span><span class="p">)</span>
+</span><span class='line'>        <span class="k">if</span> <span class="p">(</span><span class="nx">parent</span><span class="p">.</span><span class="nx">hasOwnProperty</span><span class="p">(</span><span class="nx">i</span><span class="p">))</span>
+</span><span class='line'>            <span class="nx">child</span><span class="p">[</span><span class="nx">i</span><span class="p">]</span> <span class="o">=</span> <span class="nx">parent</span><span class="p">[</span><span class="nx">i</span><span class="p">];</span>
+</span><span class='line'>    <span class="k">return</span> <span class="nx">child</span><span class="p">;</span>
+</span><span class='line'><span class="p">};</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p><code>extend</code>可以将一个对象的属性拷贝到另外一个对象里面去</p>
+
+<p>需要注意的是，这里的拷贝是浅拷贝(shallow copy)，即只拷贝引用，一旦子对象的属性(这个属性本身是对象)被更改的话，父对象也会被更改</p>
+
+<p>解决方法是如果需要的话就进行深拷贝(deep copy)，遍历获取对象的属性进行clone</p>
+
+<p>jQuery库的<code>$.extend</code>方法是一个比较完善的实现，支持浅拷贝，深拷贝，甚至多个对象的Mixin</p>
+
+<hr />
+
+<h2>模块(Module)</h2>
+
+<p>js中，通常使用一个全局对象作为namespace，简单直接，在内部，可以使用上边封装部分提到的方法构建对象</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="kd">var</span> <span class="nx">MYAPP</span> <span class="o">=</span> <span class="p">{};</span>
+</span><span class='line'>
+</span><span class='line'><span class="nx">MYAPP</span><span class="p">.</span><span class="nx">array</span> <span class="o">=</span> <span class="p">(</span><span class="kd">function</span> <span class="p">()</span> <span class="p">{</span>
+</span><span class='line'>    <span class="c1">//dependencies</span>
+</span><span class='line'>    <span class="kd">var</span> <span class="nx">myobj</span> <span class="o">=</span> <span class="nx">MYAPP</span><span class="p">.</span><span class="nx">object</span><span class="p">,</span>
+</span><span class='line'>        <span class="nx">mystring</span> <span class="o">=</span> <span class="nx">MYAPP</span><span class="p">.</span><span class="nx">string</span><span class="p">;</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="c1">//private properties</span>
+</span><span class='line'>    <span class="kd">var</span> <span class="nx">array_string</span> <span class="o">=</span> <span class="s2">&quot;[object Array]&quot;</span><span class="p">,</span>
+</span><span class='line'>        <span class="nx">ops</span> <span class="o">=</span> <span class="nb">Object</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">toString</span><span class="p">;</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="c1">//public API</span>
+</span><span class='line'>    <span class="k">return</span> <span class="p">{</span>
+</span><span class='line'>        <span class="nx">isArray</span><span class="o">:</span> <span class="kd">function</span> <span class="p">(</span><span class="nx">a</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>            <span class="k">return</span> <span class="nx">ops</span><span class="p">.</span><span class="nx">call</span><span class="p">(</span><span class="nx">a</span><span class="p">)</span> <span class="o">===</span> <span class="nx">array_string</span><span class="p">;</span>
+</span><span class='line'>        <span class="p">}</span>
+</span><span class='line'>    <span class="p">};</span>
+</span><span class='line'><span class="p">}());</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>这种构建功能模块的方式相当普遍，也可以构建出构造函数</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="nx">MYAPP</span><span class="p">.</span><span class="nx">array</span> <span class="o">=</span> <span class="p">(</span><span class="kd">function</span> <span class="p">()</span> <span class="p">{</span>
+</span><span class='line'>    <span class="c1">//constructor</span>
+</span><span class='line'>    <span class="kd">var</span> <span class="nx">Con</span> <span class="o">=</span> <span class="kd">function</span> <span class="p">(</span><span class="nx">o</span><span class="p">)</span> <span class="p">{</span> <span class="k">this</span><span class="p">.</span><span class="nx">elements</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">toArray</span><span class="p">(</span><span class="nx">o</span><span class="p">);</span> <span class="p">};</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="c1">// public API -- prototype</span>
+</span><span class='line'>    <span class="nx">Con</span><span class="p">.</span><span class="nx">prototype</span> <span class="o">=</span> <span class="p">{</span>
+</span><span class='line'>        <span class="nx">constructor</span><span class="o">:</span> <span class="nx">MYAPP</span><span class="p">.</span><span class="nb">Array</span><span class="p">,</span>
+</span><span class='line'>        <span class="nx">toArray</span><span class="o">:</span> <span class="kd">function</span> <span class="p">(</span><span class="nx">obj</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>            <span class="k">for</span> <span class="p">(</span><span class="kd">var</span> <span class="nx">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span> <span class="nx">a</span> <span class="o">=</span> <span class="p">[],</span> <span class="nx">len</span> <span class="o">=</span> <span class="nx">obj</span><span class="p">.</span><span class="nx">length</span><span class="p">;</span> <span class="nx">i</span> <span class="o">&lt;</span> <span class="nx">len</span><span class="p">;</span> <span class="nx">i</span> <span class="o">+=</span> <span class="mi">1</span><span class="p">)</span>
+</span><span class='line'>                <span class="nx">a</span><span class="p">[</span><span class="nx">i</span><span class="p">]</span> <span class="o">=</span> <span class="nx">obj</span><span class="p">[</span><span class="nx">i</span><span class="p">];</span>
+</span><span class='line'>            <span class="k">return</span> <span class="nx">a</span><span class="p">;</span>
+</span><span class='line'>        <span class="p">}</span>
+</span><span class='line'>    <span class="p">};</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="k">return</span> <span class="nx">Con</span><span class="p">;</span>
+</span><span class='line'><span class="p">}());</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<hr />
+
+<h2>柯里化(Curry)</h2>
+
+<p>js中由于闭包的存在，很多函数式编程的模式也可以利用，比如实现函数的curry化功能，即生成一个绑定部分参数的新函数，这在函数式编程中很常见。</p>
+
+<p>Curry这个名称来自于数学家Haskell Curry(著名的Haskell语言也来自于他)</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="nb">Function</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">curry</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>    <span class="nb">Function</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">curry</span> <span class="o">=</span> <span class="kd">function</span> <span class="p">()</span> <span class="p">{</span>
+</span><span class='line'>        <span class="c1">//arguments并不是真正的数组，所以没有concat方法，我们使用了slice将其转换成了数组</span>
+</span><span class='line'>        <span class="kd">var</span> <span class="nx">slice</span> <span class="o">=</span> <span class="nb">Array</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">slice</span><span class="p">,</span>
+</span><span class='line'>            <span class="nx">args</span> <span class="o">=</span> <span class="nx">slice</span><span class="p">.</span><span class="nx">apply</span><span class="p">(</span><span class="nx">arguments</span><span class="p">),</span>
+</span><span class='line'>            <span class="nx">self</span> <span class="o">=</span> <span class="k">this</span><span class="p">;</span>
+</span><span class='line'>        <span class="k">return</span> <span class="kd">function</span> <span class="p">()</span> <span class="p">{</span>
+</span><span class='line'>            <span class="k">return</span> <span class="nx">self</span><span class="p">.</span><span class="nx">apply</span><span class="p">(</span><span class="kc">null</span><span class="p">,</span> <span class="nx">args</span><span class="p">.</span><span class="nx">concat</span><span class="p">(</span><span class="nx">slice</span><span class="p">.</span><span class="nx">apply</span><span class="p">(</span><span class="nx">arguments</span><span class="p">)));</span>
+</span><span class='line'>        <span class="p">};</span>
+</span><span class='line'>    <span class="p">};</span>
+</span><span class='line'><span class="p">}</span>
+</span><span class='line'>
+</span><span class='line'><span class="kd">var</span> <span class="nx">add</span> <span class="o">=</span> <span class="kd">function</span> <span class="p">(</span><span class="nx">x</span><span class="p">,</span> <span class="nx">y</span><span class="p">)</span> <span class="p">{</span><span class="k">return</span> <span class="nx">x</span><span class="o">+</span><span class="nx">y</span><span class="p">;}</span>
+</span><span class='line'><span class="kd">var</span> <span class="nx">add1</span> <span class="o">=</span> <span class="nx">add</span><span class="p">.</span><span class="nx">curry</span><span class="p">(</span><span class="mi">1</span><span class="p">);</span>
+</span><span class='line'><span class="nx">add1</span><span class="p">(</span><span class="mi">2</span><span class="p">);</span> <span class="c1">//=&gt; 3</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<hr />
+
+<h2>结语</h2>
+
+<p>真正掌握一门语言，就需要深入这门语言去编程，这意味着去挖掘语言中最宝贵的特质，使用语言表达能力所限制之内的最简介优雅的方式进行逻辑表达，在js中，最好的部分是对象字面量，闭包，和原型，在允许的情况下，尽量使用这些精华去进行架构设计，而不是为了省事和更快上手，去模拟其他语言的特性</p>
+
+<p>本文只是js编程的基础和起点，在之后会逐渐介绍<em>coffee script</em>，<em>jQuery</em>，<em>backbone</em>等预处理语言，库，与框架，很多时候，这些框架给出的实现，都是非常优雅和便利的，但是要更深入地了解原因，以至于编写自己的扩展和库，这些基础知识是必不可少的</p>
+
+<hr />
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header class="page-header">
+    
+      <h1 class="entry-title"><a href="/blog/2012/07/18/sass/">Guide to SASS and Compass</a></h1>
     
     
       <p class="meta">
@@ -881,7 +1804,7 @@
       
   <header class="page-header">
     
-      <h1 class="entry-title"><a href="/blog/2012/07/16/style-framework/">Twitter Bootstrap及其他样式框架</a></h1>
+      <h1 class="entry-title"><a href="/blog/2012/07/16/style-framework/">Twitter Bootstrap, and CSS Framework Landscape</a></h1>
     
     
       <p class="meta">
@@ -968,7 +1891,7 @@
       
   <header class="page-header">
     
-      <h1 class="entry-title"><a href="/blog/2012/07/13/markdown/">轻量化标记语言Markdown</a></h1>
+      <h1 class="entry-title"><a href="/blog/2012/07/13/markdown/">Markdown and Lightweight Markup Languages</a></h1>
     
     
       <p class="meta">
@@ -1265,15 +2188,19 @@ ____
     <li class="nav-header">Recent Posts</li>
     
       <li class="post">
-        <a href="/blog/2012/07/18/sass/">SASS和Compass指南</a>
+        <a href="/blog/2012/07/30/javascript/">JavaScript, The Hard Parts</a>
       </li>
     
       <li class="post">
-        <a href="/blog/2012/07/16/style-framework/">Twitter Bootstrap及其他样式框架</a>
+        <a href="/blog/2012/07/18/sass/">Guide to SASS and Compass</a>
       </li>
     
       <li class="post">
-        <a href="/blog/2012/07/13/markdown/">轻量化标记语言Markdown</a>
+        <a href="/blog/2012/07/16/style-framework/">Twitter Bootstrap,  and CSS framework landscape</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2012/07/13/markdown/">Markdown and Lightweight markup languages</a>
       </li>
     
   </ul>
