@@ -876,6 +876,91 @@
 
 <hr />
 
+<h2>函数化继承(Functional Inheritance)</h2>
+
+<p>利用js的动态特性，使用mixin类似的方法也可以实现继承，这里没有用到构造函数和原型，来自<em>javascript, the good parts</em></p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+<span class='line-number'>28</span>
+<span class='line-number'>29</span>
+<span class='line-number'>30</span>
+<span class='line-number'>31</span>
+<span class='line-number'>32</span>
+<span class='line-number'>33</span>
+<span class='line-number'>34</span>
+<span class='line-number'>35</span>
+<span class='line-number'>36</span>
+<span class='line-number'>37</span>
+<span class='line-number'>38</span>
+</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="kd">var</span> <span class="nx">mammal</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">spec</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>    <span class="kd">var</span> <span class="nx">self</span> <span class="o">=</span> <span class="p">{};</span>
+</span><span class='line'>    <span class="nx">self</span><span class="p">.</span><span class="nx">get_name</span> <span class="o">=</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span><span class="k">return</span> <span class="nx">spec</span><span class="p">.</span><span class="nx">name</span><span class="p">;};</span>
+</span><span class='line'>    <span class="nx">self</span><span class="p">.</span><span class="nx">says</span> <span class="o">=</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span><span class="k">return</span> <span class="nx">spec</span><span class="p">.</span><span class="nx">saying</span> <span class="o">||</span> <span class="s1">&#39;&#39;</span><span class="p">;};</span>
+</span><span class='line'>    <span class="k">return</span> <span class="nx">self</span><span class="p">;</span>
+</span><span class='line'><span class="p">};</span>
+</span><span class='line'>
+</span><span class='line'><span class="kd">var</span> <span class="nx">myMammal</span> <span class="o">=</span> <span class="nx">mammal</span><span class="p">({</span><span class="nx">name</span><span class="o">:</span> <span class="s2">&quot;Herb&quot;</span><span class="p">});</span>
+</span><span class='line'>
+</span><span class='line'><span class="kd">var</span> <span class="nx">cat</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">spec</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>    <span class="nx">spec</span><span class="p">.</span><span class="nx">saying</span> <span class="o">=</span> <span class="nx">spec</span><span class="p">.</span><span class="nx">saying</span> <span class="o">||</span> <span class="s1">&#39;meow&#39;</span><span class="p">;</span>
+</span><span class='line'>    <span class="kd">var</span> <span class="nx">self</span> <span class="o">=</span> <span class="nx">mammal</span><span class="p">(</span><span class="nx">spec</span><span class="p">);</span>
+</span><span class='line'>    <span class="nx">self</span><span class="p">.</span><span class="nx">get_name</span> <span class="o">=</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+</span><span class='line'>        <span class="k">return</span> <span class="nx">self</span><span class="p">.</span><span class="nx">says</span><span class="p">()</span> <span class="o">+</span> <span class="s1">&#39; &#39;</span> <span class="o">+</span> <span class="nx">spec</span><span class="p">.</span><span class="nx">name</span><span class="p">;</span>
+</span><span class='line'>    <span class="p">};</span>
+</span><span class='line'>    <span class="k">return</span> <span class="nx">self</span><span class="p">;</span>
+</span><span class='line'><span class="p">};</span>
+</span><span class='line'>
+</span><span class='line'><span class="kd">var</span> <span class="nx">myCat</span> <span class="o">=</span> <span class="nx">cat</span><span class="p">({</span><span class="nx">name</span><span class="o">:</span> <span class="s2">&quot;Henri&quot;</span><span class="p">});</span>
+</span><span class='line'>
+</span><span class='line'><span class="nb">Object</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">superior</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">name</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>    <span class="kd">var</span> <span class="nx">self</span> <span class="o">=</span> <span class="k">this</span><span class="p">;</span>
+</span><span class='line'>    <span class="k">return</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+</span><span class='line'>        <span class="k">return</span> <span class="nx">self</span><span class="p">[</span><span class="nx">name</span><span class="p">].</span><span class="nx">apply</span><span class="p">(</span><span class="nx">self</span><span class="p">,</span> <span class="nx">arguments</span><span class="p">);</span>
+</span><span class='line'>    <span class="p">};</span>
+</span><span class='line'><span class="p">};</span>
+</span><span class='line'>
+</span><span class='line'><span class="kd">var</span> <span class="nx">coolcat</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">spec</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>    <span class="kd">var</span> <span class="nx">self</span> <span class="o">=</span> <span class="nx">cat</span><span class="p">(</span><span class="nx">spec</span><span class="p">);</span>
+</span><span class='line'>    <span class="kd">var</span> <span class="nx">super_get_name</span> <span class="o">=</span> <span class="nx">self</span><span class="p">.</span><span class="nx">superior</span><span class="p">(</span><span class="s1">&#39;get_name&#39;</span><span class="p">);</span>
+</span><span class='line'>    <span class="nx">self</span><span class="p">.</span><span class="nx">get_name</span> <span class="o">=</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+</span><span class='line'>        <span class="k">return</span> <span class="s1">&#39;like&#39;</span> <span class="o">+</span> <span class="nx">super_get_name</span><span class="p">()</span> <span class="o">+</span> <span class="s1">&#39; baby&#39;</span><span class="p">;</span>
+</span><span class='line'>    <span class="p">};</span>
+</span><span class='line'>    <span class="k">return</span> <span class="nx">self</span><span class="p">;</span>
+</span><span class='line'><span class="p">};</span>
+</span><span class='line'>
+</span><span class='line'><span class="kd">var</span> <span class="nx">myCoolCat</span> <span class="o">=</span> <span class="nx">coolcat</span><span class="p">({</span><span class="nx">name</span><span class="o">:</span> <span class="s1">&#39;Bix&#39;</span><span class="p">});</span>
+</span><span class='line'><span class="nx">myCoolCat</span><span class="p">.</span><span class="nx">get_name</span><span class="p">();</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<hr />
+
 <h2>模块(Module)</h2>
 
 <p>js中，通常使用一个全局对象作为namespace，简单直接，在内部，可以使用上边封装部分提到的方法构建对象</p>
