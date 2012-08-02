@@ -502,6 +502,52 @@ jQuery库的`$.extend`方法是一个比较完善的实现，支持浅拷贝，�
 
 ---
 
+## 函数化继承(Functional Inheritance)
+
+利用js的动态特性，使用mixin类似的方法也可以实现继承，这里没有用到构造函数和原型，来自*javascript, the good parts*
+``` javascript
+var mammal = function(spec) {
+    var self = {};
+    self.get_name = function() {return spec.name;};
+    self.says = function() {return spec.saying || '';};
+    return self;
+};
+
+var myMammal = mammal({name: "Herb"});
+
+var cat = function(spec) {
+    spec.saying = spec.saying || 'meow';
+    var self = mammal(spec);
+    self.get_name = function() {
+        return self.says() + ' ' + spec.name;
+    };
+    return self;
+};
+
+var myCat = cat({name: "Henri"});
+
+Object.prototype.superior = function(name) {
+    var self = this;
+    return function() {
+        return self[name].apply(self, arguments);
+    };
+};
+
+var coolcat = function(spec) {
+    var self = cat(spec);
+    var super_get_name = self.superior('get_name');
+    self.get_name = function() {
+        return 'like' + super_get_name() + ' baby';
+    };
+    return self;
+};
+
+var myCoolCat = coolcat({name: 'Bix'});
+myCoolCat.get_name();
+```
+
+---
+
 ## 模块(Module)
 
 js中，通常使用一个全局对象作为namespace，简单直接，在内部，可以使用上边封装部分提到的方法构建对象
