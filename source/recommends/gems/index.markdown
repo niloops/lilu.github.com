@@ -7,6 +7,8 @@ sharing: true
 footer: true
 ---
 
+寻找gems最好的地方: [ruby toolbox](https://www.ruby-toolbox.com/)
+
 ### Rails Test Drive
 
 * [rspec-rails](https://github.com/rspec/rspec-rails) 
@@ -21,9 +23,9 @@ footer: true
 
   模拟用户web行为的测试框架
   
-* [factory_girl_rails](https://github.com/thoughtbot/factory_girl_rails) 
+* [fabrication](https://github.com/paulelliott/fabrication) 
 
-  测试夹具生成
+  测试夹具生成，Factory girl的取代者
   
 * [faker](http://faker.rubyforge.org/) 
   
@@ -137,13 +139,13 @@ footer: true
 
   将任务放入后台队列执行
   
-* [whenever](https://github.com/javan/whenever)
-
-  编写和部署Cron
-
 * [grape](https://github.com/intridea/grape)
 
   创建REST API
+  
+* [jbuilder](https://github.com/rails/jbuilder)  
+
+  官方的Json builder
 
 ---
 
@@ -157,6 +159,14 @@ footer: true
   
   为Rails项目创建后台管理界面，非常强大的可定制UI
   
+* [whenever](https://github.com/javan/whenever)
+
+  编写和部署Cron
+  
+* [backup](https://github.com/meskyanichi/backup)
+
+  服务器数据备份工具
+  
 ---  
   
 ### Ruby General
@@ -164,6 +174,10 @@ footer: true
 * [pry](http://pry.github.com/)
 
   比起默认的IRB shell更强大的终端调试工具
+  
+* [thor](https://github.com/wycats/thor)  
+
+  可以用来代替rake和sake的cli command build工具
   
 ---  
 
