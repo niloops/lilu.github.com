@@ -7,25 +7,27 @@ sharing: true
 footer: true
 ---
 
+这里推荐的Gems是完全主观的，我尽量在每一个领域里给出唯一的，也是我自己的选择
+
 寻找gems最好的地方: [ruby toolbox](https://www.ruby-toolbox.com/)
 
 ### Rails Test Drive
 
 * [rspec-rails](https://github.com/rspec/rspec-rails) 
 
-  Rspec的rails集成
+  单元测试框架
   
 * [cucumber-rails](https://github.com/cucumber/cucumber-rails) 
 
-  Cucumber的rails集成
+  行为测试框架
 
 * [capybara](https://github.com/jnicklas/capybara) 
 
-  模拟用户web行为的测试框架
+  web行为模拟框架
   
 * [fabrication](https://github.com/paulelliott/fabrication) 
 
-  测试夹具生成，Factory girl的取代者
+  测试夹具生成
   
 * [faker](http://faker.rubyforge.org/) 
   
@@ -91,13 +93,9 @@ footer: true
 
   CSS样式库Twitter Bootstrap的sass移植
   
-* [haml-rails](https://github.com/indirect/haml-rails) 
-  
-  模板引擎Haml，公认的ERB取代者
-  
 * [slim](http://slim-lang.com) 
 
-  比Haml更清晰和更快的模板引擎
+  最清晰和最快的模板引擎
 
 * [kaminari](https://github.com/amatsuda/kaminari) 
 

@@ -7,3 +7,5 @@ footer: true
 ---
 
 ## [Gems](/recommends/gems)
+
+## [JavaScript libs](/recommends/js-libs)
