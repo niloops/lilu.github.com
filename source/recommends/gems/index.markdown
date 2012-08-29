@@ -17,10 +17,6 @@ footer: true
 
   单元测试框架
   
-* [cucumber-rails](https://github.com/cucumber/cucumber-rails) 
-
-  行为测试框架
-
 * [capybara](https://github.com/jnicklas/capybara) 
 
   web行为模拟框架
