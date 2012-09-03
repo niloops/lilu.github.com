@@ -25,10 +25,6 @@ footer: true
 
   测试夹具生成
   
-* [faker](http://faker.rubyforge.org/) 
-  
-  假数据生成
-  
 * [guard](https://github.com/guard/guard) 
   
   监控文件变化的事件并触发任务，有大量扩展，非常适合运行spec
@@ -36,10 +32,6 @@ footer: true
 * [spork](https://github.com/timcharper/spork) 
 
   DRb server，预加载测试环境可以节省大量的测试时间
-  
-* [simplecov](https://github.com/colszowka/simplecov)
-
-  测试的代码覆盖统计工具
   
 * [database_cleaner](https://github.com/bmabey/database_cleaner)
 
