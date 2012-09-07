@@ -15,7 +15,11 @@ footer: true
 
 * [rspec-rails](https://github.com/rspec/rspec-rails) 
 
-  单元测试框架
+  行为测试框架rspec的rails集成
+  
+* [jasminerice](https://github.com/bradphelan/jasminerice)
+
+  javascript测试框架jasmine的rails集成
   
 * [capybara](https://github.com/jnicklas/capybara) 
 
@@ -25,18 +29,34 @@ footer: true
 
   测试夹具生成
   
-* [guard](https://github.com/guard/guard) 
-  
-  监控文件变化的事件并触发任务，有大量扩展，非常适合运行spec
-  
-* [spork](https://github.com/timcharper/spork) 
+* [ffaker](https://github.com/EmmanuelOga/ffaker)
 
-  DRb server，预加载测试环境可以节省大量的测试时间
+  最快的假数据生成器
   
 * [database_cleaner](https://github.com/bmabey/database_cleaner)
 
   测试数据库清空工具
   
+* [guard](https://github.com/guard/guard) 
+  
+  监控文件变化的事件并触发任务，有大量扩展，非常适合运行spec
+  
+* [guard-rspec](https://github.com/guard/guard-rspec)  
+
+  rspec的guard插件
+  
+* [guard-spork](https://github.com/guard/guard-spork)  
+  
+  让guard集成DRb server：spork，预加载测试环境可以节省大量的测试时间
+  
+* [guard-jasmine](https://github.com/netzpirat/guard-jasmine)
+
+  jasmine的guard插件，使用phantomjs做无头浏览器测试
+  
+* [guard-livereload](https://github.com/guard/guard-livereload)  
+
+  livereload的guard插件，自动刷新浏览器
+
 ---
 
 ### Rails Auth
@@ -80,6 +100,10 @@ footer: true
 * [bootstrap-sass](https://github.com/thomas-mcdonald/bootstrap-sass)
 
   CSS样式库Twitter Bootstrap的sass移植
+  
+* [handlebars_assets](https://github.com/leshill/handlebars_assets)
+
+  最好的js模板引擎handlebars的asset pipeline适配
   
 * [slim](http://slim-lang.com) 
 
